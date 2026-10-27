@@ -33,7 +33,11 @@
         "modelID": "probe-a"
       },
       "route": true,
-      "effort": false
+      "effort": false,
+      "argvRun": false,
+      "argvServe": true,
+      "argvRunIndex": -1,
+      "argvServeIndex": 2
     },
     {
       "inputModel": {
@@ -47,7 +51,11 @@
         "variant": "low"
       },
       "route": false,
-      "effort": false
+      "effort": false,
+      "argvRun": false,
+      "argvServe": true,
+      "argvRunIndex": -1,
+      "argvServeIndex": 2
     },
     {
       "original": {
@@ -55,7 +63,11 @@
         "modelID": "probe-a"
       },
       "route": false,
-      "effort": false
+      "effort": false,
+      "argvRun": false,
+      "argvServe": true,
+      "argvRunIndex": -1,
+      "argvServeIndex": 2
     },
     {
       "original": {
@@ -63,7 +75,11 @@
         "modelID": "probe-a"
       },
       "route": false,
-      "effort": true
+      "effort": true,
+      "argvRun": false,
+      "argvServe": true,
+      "argvRunIndex": -1,
+      "argvServeIndex": 2
     },
     {
       "original": {
@@ -71,7 +87,71 @@
         "modelID": "probe-a"
       },
       "route": false,
-      "effort": false
+      "effort": false,
+      "argvRun": false,
+      "argvServe": true,
+      "argvRunIndex": -1,
+      "argvServeIndex": 2
+    },
+    {
+      "original": {
+        "providerID": "openai",
+        "modelID": "probe-a"
+      },
+      "route": true,
+      "effort": false,
+      "argvRun": true,
+      "argvServe": false,
+      "argvRunIndex": 2,
+      "argvServeIndex": -1
+    },
+    {
+      "inputModel": {
+        "providerID": "openai",
+        "modelID": "probe-a"
+      },
+      "inputVariant": "low",
+      "original": {
+        "providerID": "openai",
+        "modelID": "probe-a",
+        "variant": "low"
+      },
+      "route": true,
+      "effort": false,
+      "argvRun": true,
+      "argvServe": false,
+      "argvRunIndex": 2,
+      "argvServeIndex": -1
+    },
+    {
+      "inputModel": {
+        "providerID": "openai",
+        "modelID": "probe-a"
+      },
+      "original": {
+        "providerID": "openai",
+        "modelID": "probe-a"
+      },
+      "route": true,
+      "effort": false,
+      "argvRun": true,
+      "argvServe": false,
+      "argvRunIndex": 2,
+      "argvServeIndex": -1
+    },
+    {
+      "inputVariant": "low",
+      "original": {
+        "providerID": "openai",
+        "modelID": "probe-a",
+        "variant": "low"
+      },
+      "route": true,
+      "effort": false,
+      "argvRun": true,
+      "argvServe": false,
+      "argvRunIndex": 2,
+      "argvServeIndex": -1
     }
   ],
   "connected": [
@@ -99,6 +179,27 @@
     },
     {
       "model": "probe-a"
+    }
+  ],
+  "cliResults": [
+    {
+      "label": "default",
+      "model": "probe-b",
+      "reasoningEffort": "high"
+    },
+    {
+      "label": "explicit",
+      "model": "probe-a",
+      "reasoningEffort": "low"
+    },
+    {
+      "label": "model-only",
+      "model": "probe-a"
+    },
+    {
+      "label": "variant-only",
+      "model": "probe-a",
+      "reasoningEffort": "low"
     }
   ]
 }

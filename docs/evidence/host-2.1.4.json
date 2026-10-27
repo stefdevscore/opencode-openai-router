@@ -1,0 +1,28 @@
+{
+  "version": "opencode v2.1.4",
+  "scope": "isolated local fixture; no real OpenAI auth or automatic routing",
+  "events": [
+    {
+      "type": "setup",
+      "id": "opencode.openai-router"
+    },
+    {
+      "type": "prompt",
+      "matchesFixture": true
+    },
+    {
+      "type": "catalog",
+      "localModels": [
+        "probe-a"
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "model": "probe-a"
+    },
+    {
+      "model": "probe-a"
+    }
+  ]
+}

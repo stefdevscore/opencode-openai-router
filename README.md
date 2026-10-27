@@ -4,7 +4,7 @@ A planned OpenCode plugin for selecting an available OpenAI model and reasoning 
 
 ## Status
 
-This is a bare scaffold. The plugin loads an empty set of hooks and **does not route models, collect data, or change OpenCode's behavior yet**. Model discovery, routing controls, manual overrides, safe fallbacks, and local performance measurement are future work. The OpenCode plugin API's support for each of these behaviors needs to be verified before implementation.
+The plugin loads an empty set of hooks and **does not route models, collect data, or change OpenCode's behavior yet**. Pure catalog/configuration utilities and an effort recommender exist for testing, but are not wired to OpenCode and do not assess prompts. Automatic routing, controls, safe fallbacks, and local performance measurement are future work.
 
 The intended profiles are Economy, Balanced, and Quality. The design should avoid unnecessary model switches, respect user choices, and prioritize successful outcomes over token minimization. It should not require a separate paid classification service or manage credentials. Subscription allowance savings should only be claimed when reliably measurable.
 
@@ -12,7 +12,7 @@ See the [architecture abstract](docs/architecture.md) for the intended design an
 
 The [v0.1 product requirements](docs/prd-v0.1.md) define the release scope, acceptance criteria, and host compatibility gates. The [domain specifications](docs/specs/README.md) describe the planned contracts and verification for each part of the plugin.
 
-Start with the [development plan](docs/development-plan.md) and [review synthesis](docs/review-synthesis.md). The [pinned host probe](docs/host-feasibility-v1.19.4.md) verifies basic local-provider routing and variant behavior. The [old classifier](docs/classifier-assessment.md) remains rejected; real policy quality and production compatibility are release work.
+Start with the [development plan](docs/development-plan.md) and [review synthesis](docs/review-synthesis.md). The [v1 host probe](docs/host-feasibility-v1.19.4.md) verifies basic local-provider routing and variant behavior. The [v2 desktop report](docs/host-feasibility-v2.1.4.md) records the separate desktop compatibility findings. The [old classifier](docs/classifier-assessment.md) remains rejected; real policy quality and production compatibility are release work.
 
 ## Development
 
@@ -25,15 +25,16 @@ npm run check:docs
 npm test
 ```
 
-The compiled plugin entry point is `dist/index.js`. For local experimentation, copy it into an OpenCode project's `.opencode/plugins/` directory and restart OpenCode. It is intentionally inert at this stage. See the [OpenCode plugin documentation](https://opencode.ai/docs/plugins/) for plugin loading and API details.
+The compiled plugin entry point is `dist/index.js`. It is intentionally inert at this stage. See the [v1 plugin documentation](https://opencode.ai/docs/plugins/) and [v2 plugin documentation](https://opencode.ai/v2/docs/build/plugins/) for version-specific loading and API details.
 
 An optional credential-free host probe uses a pinned OpenCode binary and an isolated local provider:
 
 ```sh
-npm run probe:host -- /absolute/path/to/opencode
+npm run probe:host -- /absolute/path/to/opencode-v1
+npm run probe:v2 -- /absolute/path/to/opencode-v2
 ```
 
-It does not use the user's provider credentials or modify the global host installation. Run it in an environment without externally managed OpenCode plugins or providers. It is separate from ordinary CI and has been exercised on macOS arm64 against 1.19.4; see the report for limitations. The package version `0.1.0-dev.0` identifies this scaffold, not a released automatic router.
+These probes do not use the user's provider credentials or modify the global host installation. Run it in an environment without externally managed OpenCode plugins or providers. It is separate from ordinary CI and has been exercised on macOS arm64 against 1.19.4; see the report for limitations. The package version `0.1.0-dev.0` identifies this scaffold, not a released automatic router.
 
 ## CI and releases
 

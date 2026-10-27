@@ -15,7 +15,7 @@ const failures = [];
 const evidence = "docs/evidence/host-1.19.4.json";
 try {
   const report = JSON.parse(await readFile(evidence, "utf8"));
-  if (report.hostVersion !== "1.19.4" || report.results?.length !== 5 || report.providerRequests?.length !== 5) {
+  if (report.hostVersion !== "1.19.4" || report.results?.length !== 5 || report.providerRequests?.length !== 5 || report.cliResults?.length !== 4) {
     failures.push(`${evidence}: incomplete pinned-host evidence`);
   }
 } catch {

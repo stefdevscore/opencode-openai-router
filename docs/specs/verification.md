@@ -7,7 +7,7 @@
 3. Quality: frozen live paired task corpus before automatic policy release. Synthetic dispatch alone cannot establish coding quality or real ChatGPT auth.
 4. Packaging/release: clean build, typecheck, tests/audit, archive contents, installation/removal and rollback, source/artifact binding and approval.
 
-The [probe](../../scripts/probe-host.mjs) and [evidence](../evidence/host-1.19.4.json) establish the basic 1.19.4 mechanism with a local fixture. Its synthetic marker-based decisions are not the production assessment policy; its minimal explicit-input guard still needs the full adapter acceptance matrix. Run it manually with a pinned binary; it must not use provider credentials or user config. Ordinary CI runs unit/fixture checks; an optional integration job may install the pinned host and run the local probe after its OS is tested. No claim about TUI, desktop, auth or quality follows.
+The [probe](../../scripts/probe-host.mjs) and [evidence](../evidence/host-1.19.4.json) establish the basic 1.19.4 mechanism with a local fixture. Its synthetic marker-based decisions are not the production assessment policy; its minimal explicit-input guard still needs the full adapter acceptance matrix. Run it manually with a pinned binary; it must not use provider credentials or user config. Ordinary CI runs unit/fixture checks; an optional integration job may install the pinned host and run the local probe after its OS is tested. No claim about TUI, desktop, auth or quality follows from that v1 probe. The separate [v2 report](../host-feasibility-v2.1.4.md) records its local fixture and limited live connectivity smoke; neither validates automatic routing or quality.
 
 ## Performance and quality gates
 

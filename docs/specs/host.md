@@ -2,7 +2,7 @@
 
 ## Boundary and target
 
-Target pinned OpenCode 1.19.4 noninteractive `run` and equivalent server prompt path. Use the public `chat.message` hook and SDK inventory. The [probe](../../scripts/probe-host.mjs) verifies core local-provider behavior; it is research scaffolding, not production routing. TUI, desktop, interactive CLI, v2 and unknown client intent keep selections until separately supported. No proxy, virtual model, host patch, picker setter or session-model write.
+The primary desktop target is OpenCode 2.1.4; its native boundary and selection-preservation semantics remain unverified, as specified in [ADR 0002](../decisions/0002-opencode-v2-desktop.md). No v2 mutation is authorized until those tests pass. The remainder of this specification describes the separate pinned OpenCode 1.19.4 noninteractive `run` and equivalent server prompt path. Use the public `chat.message` hook and SDK inventory. The [probe](../../scripts/probe-host.mjs) verifies core local-provider behavior; it is research scaffolding, not production routing. TUI, desktop, interactive CLI and unknown client intent keep selections until separately supported. No proxy, virtual model, host patch, picker setter or session-model write.
 
 The pinned hook input does not identify its client surface. An omitted model or variant in a server prompt is not, by itself, proof that the caller is noninteractive CLI. Before enabling automatic routing, the adapter must establish a reliable, tested way to limit activation to supported clients or obtain an explicit user-controlled opt-in with documented scope. If neither is available, unknown origin keeps the current pair; the local server probe does not satisfy this gate.
 
