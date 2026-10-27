@@ -1,0 +1,104 @@
+{
+  "hostVersion": "1.19.4",
+  "scope": "isolated local fixture; no live OpenAI authentication or quality evaluation",
+  "results": [
+    {
+      "text": "route-fixture",
+      "model": "probe-b",
+      "variant": "high"
+    },
+    {
+      "text": "keep-fixture",
+      "model": "probe-a",
+      "variant": "low"
+    },
+    {
+      "text": "default-fixture",
+      "model": "probe-a"
+    },
+    {
+      "text": "effort-fixture",
+      "model": "probe-a",
+      "variant": "high"
+    },
+    {
+      "text": "followup-fixture",
+      "model": "probe-a"
+    }
+  ],
+  "hooks": [
+    {
+      "original": {
+        "providerID": "openai",
+        "modelID": "probe-a"
+      },
+      "route": true,
+      "effort": false
+    },
+    {
+      "inputModel": {
+        "providerID": "openai",
+        "modelID": "probe-a"
+      },
+      "inputVariant": "low",
+      "original": {
+        "providerID": "openai",
+        "modelID": "probe-a",
+        "variant": "low"
+      },
+      "route": false,
+      "effort": false
+    },
+    {
+      "original": {
+        "providerID": "openai",
+        "modelID": "probe-a"
+      },
+      "route": false,
+      "effort": false
+    },
+    {
+      "original": {
+        "providerID": "openai",
+        "modelID": "probe-a"
+      },
+      "route": false,
+      "effort": true
+    },
+    {
+      "original": {
+        "providerID": "openai",
+        "modelID": "probe-a"
+      },
+      "route": false,
+      "effort": false
+    }
+  ],
+  "connected": [
+    "openai"
+  ],
+  "configuredVariants": [
+    "low",
+    "high"
+  ],
+  "providerRequests": [
+    {
+      "model": "probe-b",
+      "reasoningEffort": "high"
+    },
+    {
+      "model": "probe-a",
+      "reasoningEffort": "low"
+    },
+    {
+      "model": "probe-a"
+    },
+    {
+      "model": "probe-a",
+      "reasoningEffort": "high"
+    },
+    {
+      "model": "probe-a"
+    }
+  ]
+}

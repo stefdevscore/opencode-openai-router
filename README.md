@@ -10,22 +10,35 @@ The intended profiles are Economy, Balanced, and Quality. The design should avoi
 
 See the [architecture abstract](docs/architecture.md) for the intended design and the [research note](docs/research.md) for supporting findings and implementation questions.
 
+The [v0.1 product requirements](docs/prd-v0.1.md) define the release scope, acceptance criteria, and host compatibility gates. The [domain specifications](docs/specs/README.md) describe the planned contracts and verification for each part of the plugin.
+
+Start with the [development plan](docs/development-plan.md) and [review synthesis](docs/review-synthesis.md). The [pinned host probe](docs/host-feasibility-v1.19.4.md) verifies basic local-provider routing and variant behavior. The [old classifier](docs/classifier-assessment.md) remains rejected; real policy quality and production compatibility are release work.
+
 ## Development
 
 Use Node.js 24 and npm for development, matching CI. Other Node.js versions have not been verified.
 
 ```sh
-npm install
+npm ci
 npm run typecheck
+npm run check:docs
 npm test
 ```
 
 The compiled plugin entry point is `dist/index.js`. For local experimentation, copy it into an OpenCode project's `.opencode/plugins/` directory and restart OpenCode. It is intentionally inert at this stage. See the [OpenCode plugin documentation](https://opencode.ai/docs/plugins/) for plugin loading and API details.
 
+An optional credential-free host probe uses a pinned OpenCode binary and an isolated local provider:
+
+```sh
+npm run probe:host -- /absolute/path/to/opencode
+```
+
+It does not use the user's provider credentials or modify the global host installation. Run it in an environment without externally managed OpenCode plugins or providers. It is separate from ordinary CI and has been exercised on macOS arm64 against 1.19.4; see the report for limitations. The package version `0.1.0-dev.0` identifies this scaffold, not a released automatic router.
+
 ## CI and releases
 
-CI installs locked dependencies, audits for high or critical advisories, checks types, builds, and runs the Node.js test suite on pushes and pull requests to `main` and `development`. Add new tests under `test/` using the built-in test runner. Changes reach `main` through a pull request with a passing CI check.
+CI installs locked dependencies, audits for high or critical advisories, checks types and local documentation links, builds clean output, and runs the Node.js test suite on pushes and pull requests to `main` and `development`. Add new tests under `test/` using the built-in test runner. Changes reach `main` through a pull request with a passing CI check.
 
 Development dependency overrides patch advisories in the OpenCode plugin package's transitive `zod` and `toml` dependencies. An integration test exercises Effect's TOML file parser with valid and invalid input. The `toml` override crosses a major version: version 5 rejects integers outside JavaScript's safe range by default, so the test does not establish compatibility for every TOML document. These dependencies are not included in the compiled plugin. Revisit the overrides when upgrading the OpenCode plugin package or using its runtime APIs.
 
-To create a GitHub release, update the package version on `main`, then push a matching tag such as `v0.1.0` pointing to a commit on `main`. The release workflow checks the tag and ancestry, repeats the checks, and attaches an npm package archive to the GitHub release. It does not publish to an npm registry; the package remains private while the plugin is a scaffold.
+The tagged release workflow is disabled while the required release-evidence and approval gates are designed and verified. It does not publish to an npm registry; the package remains private while the plugin is a scaffold. See the [verification specification](docs/specs/verification.md) before enabling releases.

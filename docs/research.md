@@ -2,6 +2,8 @@
 
 Research snapshot: 27 October 2026. This document describes the intended structure, not implemented behavior.
 
+**Historical research note:** the runtime investigation and [ADR 0001](decisions/0001-turn-local-routing.md) supersede the source-only feasibility assumptions and implementation gates below. Current implementation authority is the [PRD](prd-v0.1.md), [specs](specs/README.md) and [development plan](development-plan.md). Star counts and community descriptions are dated context, not current support or adoption guarantees.
+
 The [architecture abstract](architecture.md) presents the project's intended design at a higher level. This note retains the supporting findings and questions for implementation.
 
 ## What we learned
