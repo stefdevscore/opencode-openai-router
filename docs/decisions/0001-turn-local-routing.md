@@ -1,6 +1,6 @@
 # ADR 0001: use a turn-local plugin boundary
 
-- Status: accepted for development; automatic release requires the remaining tests.
+- Status: accepted for the v1 adapter; [ADR 0002](0002-opencode-v2-desktop.md) defines the primary v2 desktop target. Automatic release requires the remaining tests.
 - Date: 27 October 2026.
 - Governs: [PRD](../prd-v0.1.md) and [specifications](../specs/README.md).
 

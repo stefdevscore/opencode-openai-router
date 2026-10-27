@@ -11,7 +11,7 @@ import { setTimeout as delay } from "node:timers/promises";
 
 const binary = process.argv[2];
 assert.ok(binary && path.isAbsolute(binary), "Provide an absolute OpenCode binary path");
-const totalBudget = AbortSignal.timeout(90000);
+const totalBudget = AbortSignal.timeout(240000);
 const root = await mkdtemp(path.join(os.tmpdir(), "openai-router-probe-"));
 const requests = [];
 const endpoint = http.createServer(async (req, res) => {
@@ -50,7 +50,7 @@ export const Probe = async () => ({
   "chat.message": async (input, output) => {
     const route = output.parts.some(p => p.type === "text" && p.text === "route-fixture");
     const effort = output.parts.some(p => p.type === "text" && p.text === "effort-fixture");
-    await appendFile(${JSON.stringify(hookLog)}, JSON.stringify({ inputModel: input.model, inputVariant: input.variant, original: output.message.model, route, effort }) + "\\n");
+    await appendFile(${JSON.stringify(hookLog)}, JSON.stringify({ inputModel: input.model, inputVariant: input.variant, original: output.message.model, route, effort, argvRun: process.argv.includes("run"), argvServe: process.argv.includes("serve"), argvRunIndex: process.argv.indexOf("run"), argvServeIndex: process.argv.indexOf("serve") }) + "\\n");
     if (input.model || input.variant) return;
     if (route) output.message.model = { providerID: "openai", modelID: "probe-b", variant: "high" };
     if (effort) output.message.model = { ...output.message.model, variant: "high" };
@@ -121,8 +121,40 @@ export const Probe = async () => ({
   assert.ok(requests.some(r => r.model === "probe-b"), "Local provider actually received routed model");
   assert.equal(requests[0].reasoning_effort, "high", "Provider actually received routed effort");
   assert.equal(requests[3].reasoning_effort, "high", "Provider received separate variant-only change");
+  const serverRequests = requests.slice();
+  const cliResults = [];
+  for (const [label, args] of [
+    ["default", ["run", "--format", "json", "--title", "local-probe", "route-fixture"]],
+    ["explicit", ["run", "--format", "json", "--title", "local-probe", "--model", "openai/probe-a", "--variant", "low", "route-fixture"]],
+    ["model-only", ["run", "--format", "json", "--title", "local-probe", "--model", "openai/probe-a", "route-fixture"]],
+    ["variant-only", ["run", "--format", "json", "--title", "local-probe", "--variant", "low", "route-fixture"]],
+  ]) {
+    const before = requests.length;
+    const result = await new Promise((resolve, reject) => {
+      const cli = spawn(binary, args, { cwd: root, env, stdio: ["ignore", "pipe", "pipe"], signal: totalBudget });
+      let output = "";
+      cli.stdout.on("data", data => { output += data; });
+      cli.stderr.on("data", data => { output += data; });
+      cli.on("error", reject);
+      cli.on("close", code => code === 0 ? resolve(output) : reject(new Error(`CLI ${label} failed (${code}): ${output.slice(-2000)}`)));
+    });
+    assert.ok(result.includes("probe-ok"), `CLI ${label} received fixture response`);
+    assert.equal(requests.length - before, 1, `CLI ${label} issued one provider request`);
+    const request = requests.at(-1);
+    cliResults.push({ label, model: request.model, reasoningEffort: request.reasoning_effort });
+  }
+  assert.equal(cliResults[0].model, "probe-b", "CLI default path uses routed model");
+  assert.equal(cliResults[0].reasoningEffort, "high", "CLI default path uses routed effort");
+  assert.equal(cliResults[1].model, "probe-a", "CLI explicit model is preserved");
+  assert.equal(cliResults[1].reasoningEffort, "low", "CLI explicit variant is preserved");
+  assert.equal(cliResults[2].model, "probe-a", "CLI model-only selection is preserved");
+  assert.equal(cliResults[3].model, "probe-a", "CLI variant-only selection preserves model");
+  assert.equal(cliResults[3].reasoningEffort, "low", "CLI variant-only selection is preserved");
   const hooks = (await readFile(hookLog, "utf8")).trim().split("\n").map(JSON.parse);
-  console.log(JSON.stringify({ hostVersion, scope: "isolated local fixture; no live OpenAI authentication or quality evaluation", results, hooks, connected: catalog.connected, configuredVariants: Object.keys(provider.models["probe-b"].variants ?? {}), providerRequests: requests.map(r => ({ model: r.model, reasoningEffort: r.reasoning_effort })) }, null, 2));
+  assert.ok(hooks.slice(-4).every(hook => hook.argvRun && !hook.argvServe), "Standalone CLI fixtures use the run process boundary");
+  assert.ok(!hooks.at(-2).inputVariant, "Model-only input is distinguishable at the hook");
+  assert.ok(!hooks.at(-1).inputModel, "Variant-only input is distinguishable at the hook");
+  console.log(JSON.stringify({ hostVersion, scope: "isolated local fixture; no live OpenAI authentication or quality evaluation", results, hooks, connected: catalog.connected, configuredVariants: Object.keys(provider.models["probe-b"].variants ?? {}), providerRequests: serverRequests.map(r => ({ model: r.model, reasoningEffort: r.reasoning_effort })), cliResults }, null, 2));
 } catch (error) {
   console.error(log.slice(-4000));
   throw error;

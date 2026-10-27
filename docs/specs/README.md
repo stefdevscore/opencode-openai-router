@@ -1,6 +1,6 @@
 # v0.1 domain specifications
 
-Authority: [PRD](../prd-v0.1.md) → [ADR 0001](../decisions/0001-turn-local-routing.md) → these specs. They replace the earlier host-wide transaction, entitlement-proof and durable-commit-journal proposal. Planned behavior is distinct from [runtime evidence](../host-feasibility-v1.19.4.md).
+Authority: [PRD](../prd-v0.1.md) → [ADR 0001](../decisions/0001-turn-local-routing.md) for v1 and [ADR 0002](../decisions/0002-opencode-v2-desktop.md) for v2 → these specs. They replace the earlier host-wide transaction, entitlement-proof and durable-commit-journal proposal. Planned behavior is distinct from [v1 runtime evidence](../host-feasibility-v1.19.4.md) and [v2 runtime evidence](../host-feasibility-v2.1.4.md).
 
 | Domain | Responsibility | PRD |
 | --- | --- | --- |
