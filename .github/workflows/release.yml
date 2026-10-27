@@ -10,6 +10,8 @@ permissions:
 jobs:
   release:
     name: Build and release
+    # Disabled until the release-evidence and approval gates are implemented.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
