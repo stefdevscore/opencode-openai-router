@@ -1,17 +1,23 @@
 {
   "name": "opencode-openai-router",
-  "version": "0.1.0",
+  "version": "0.1.0-dev.0",
   "private": true,
   "type": "module",
   "exports": "./dist/index.js",
-  "files": ["dist", "docs"],
+  "files": [
+    "dist",
+    "docs",
+    "scripts"
+  ],
   "scripts": {
-    "build": "tsc",
+    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsc",
     "typecheck": "tsc --noEmit",
-    "test": "npm run build && node --test"
+    "test": "npm run build && node --test",
+    "check:docs": "node scripts/check-docs.mjs",
+    "probe:host": "node scripts/probe-host.mjs"
   },
   "devDependencies": {
-    "@opencode-ai/plugin": "^1.19.4",
+    "@opencode-ai/plugin": "1.19.4",
     "typescript": "^5.9.3"
   },
   "overrides": {

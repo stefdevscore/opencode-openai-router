@@ -10,4 +10,4 @@ The design relies on information actually exposed by OpenCode. Model names or co
 
 Any performance measurement is intended to be local, minimal, and opt-in, with a clear retention policy. Results should distinguish observed data and verifiable outcomes from estimates; subscription allowance savings will not be claimed without reliable measurement. The current repository is an inert scaffold: routing, discovery, controls, and measurement are not yet implemented.
 
-The supporting [research note](research.md) records the plugin comparisons, proposed module boundaries, and integration questions behind this abstract.
+The supporting [research note](research.md) records historical comparisons. The [current design decision](decisions/0001-turn-local-routing.md) scopes routing to a pending turn, and the [development plan](development-plan.md) sequences implementation and verification. Actual dispatch has been observed only against the pinned host with a local fixture; policy quality and real account compatibility remain release evidence.

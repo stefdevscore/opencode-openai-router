@@ -1,20 +1,33 @@
-# OpenCode 1.19.4 feasibility: source review
+# OpenCode 1.19.4: pinned source and runtime findings
 
-- **Date:** 27 October 2026
-**Verdict:** No-go for automatic routing under the v0.1 safety contract; runtime integration remains unverified.
+- Date: 27 October 2026.
+- Verdict: core turn-local routing mechanism verified against a local provider; production acceptance remains incomplete.
 
-This is a source review, not the scripted-host spike or a claim that all relevant OpenCode APIs have been exhaustively searched. It does not test a live account, UI, CLI invocation, credentials, concurrency, or actual model requests. The pinned upstream tag `v1.19.4` resolved to commit `148842ef7cb1bc34192b3fff57d0f9721ab9c801`. Source links below use that commit, rather than a moving branch.
+This report supersedes the earlier source-only no-go under the overconstrained transaction proposal. [ADR 0001](decisions/0001-turn-local-routing.md) explains the revised boundary. The plugin itself remains inert; the probe deliberately mutates synthetic fixtures to test host mechanics.
 
-## Evidence
+## Reproduction
 
-- In the pinned [plugin hook definition](https://github.com/anomalyco/opencode/blob/148842ef7cb1bc34192b3fff57d0f9721ab9c801/packages/plugin/src/index.ts), `chat.message` receives input selection fields and an output user message and parts; the declared hook shape does not itself describe an atomic guarded-commit API, a deadline, catalog revision, or explicit selection origin.
-- In the pinned [prompt implementation](https://github.com/anomalyco/opencode/blob/148842ef7cb1bc34192b3fff57d0f9721ab9c801/packages/opencode/src/session/prompt.ts), OpenCode resolves an input/agent/session model and variant, constructs the user message, and updates session agent/model state before invoking `chat.message`. It invokes the hook with the message object and subsequently saves that object. Later, the loop looks up the model from the saved latest user message. This supports the **hypothesis** that mutating the output user message can affect that turn; it does not establish actual provider dispatch, variant behavior, user-override semantics, rollback, or UI consistency.
-- The same hook's `model` and `variant` inputs originate from prompt input. The source reviewed does not establish that their presence distinguishes a user picker action from a CLI/client-provided default. The hook type does not itself provide a selection origin or a scope identifier.
-- The paths examined do not document a single atomic comparison across turn, selection, router controls, connection, catalog revision and deadline. The `chat.message` hook may be able to mutate an object, but that is not evidence that a late mutation is impossible or that an intervening user action is atomically protected. The catalog evidence and native controls required by the specs have not been demonstrated.
-- The [upstream issue on active model state](https://github.com/anomalyco/opencode/issues/18644) describes per-turn output-message mutation and a distinction from active UI model state. A separate [issue reporting v1.15.7 behavior](https://github.com/anomalyco/opencode/issues/28901) reports a different experiment and outcome. These reports concern different questions and do not substitute for a test of the pinned build.
+Run `node scripts/probe-host.mjs /absolute/path/to/opencode` with the 1.19.4 native binary. The npm `opencode-ai@1.19.4` wrapper required its postinstall link; the native `opencode-darwin-arm64@1.19.4` binary was invoked directly from npm's cache. The global OpenCode installation was not changed. Tested on macOS arm64 with Node.js 26.11.1 driving the probe; ordinary project CI uses Node.js 24, so probe portability to other OS/Node versions remains unverified.
 
-## Decision and next evidence
+The harness uses isolated XDG config/data/cache/state directories, a temporary working directory, a local HTTP fixture, a dummy local API key, an ephemeral password for the local OpenCode server, and a restricted child environment with no inherited provider keys. It cleans up its host process and files. It neither reads the user's OpenCode auth store nor makes a live OpenAI inference. System-managed OpenCode settings may still apply independently of XDG configuration; run the probe in an environment without external managed plugins or providers. The global host remains 1.3.13.
 
-The automatic-routing gate is **not met** for 1.19.4. Do not ship it as a supported automatic host based on these observations. A recommendation-only preview can proceed only if it can safely load and inspect without changing the host selection, and must make that limitation clear.
+## Runtime observations
 
-To reassess the no-go, run the complete [host spike](specs/verification.md#first-host-spike) against a pinned isolated host and scripted provider. In particular, obtain actual dispatched model/variant evidence, catalog and account eligibility semantics, native pin/resume behavior, selection-origin signals, and race-free guarded commit and deadline evidence. If any mandatory guarantee is absent, an upstream-supported API or a separately verified host version is required; mutating `output.message.model` alone is insufficient. Account-specific behavior requires separately authorized live evaluation.
+The sanitized [JSON output](evidence/host-1.19.4.json) records:
+
+- `/provider` exposed `openai` as connected, both configured model candidates, and `low`/`high` variants. This is configured host inventory, not remote entitlement proof.
+- Editing the pending default `probe-a` pair to `probe-b/high` produced an actual local-provider request for `probe-b` with `reasoning_effort: high`. The temporary plugin preserves explicit prompt selections.
+- A separate variant-only edit retained `probe-a` and sent `reasoning_effort: high`.
+- An unchanged explicit fixture retained `probe-a/low`. With no prompt selection, hook `input.model`/`input.variant` were omitted and the host selected its default.
+- A following turn in the routed session returned to the host session model `probe-a`; omitting its variant used the host default, not the routed `high` variant. Do not promise persistence of a prior effort.
+- Each simple fixture generated one provider request; this is not a universal claim about tool loops or auxiliary model calls.
+
+## Pinned source corroboration
+
+Upstream tag `v1.19.4` resolved to `148842ef7cb1bc34192b3fff57d0f9721ab9c801`. [Prompt code](https://github.com/anomalyco/opencode/blob/148842ef7cb1bc34192b3fff57d0f9721ab9c801/packages/opencode/src/session/prompt.ts) constructs session state before invoking `chat.message`, saves the mutable user message afterward, and later resolves the model from it. [Plugin dispatch](https://github.com/anomalyco/opencode/blob/148842ef7cb1bc34192b3fff57d0f9721ab9c801/packages/opencode/src/plugin/index.ts) awaits hooks in registration order. [CLI code](https://github.com/anomalyco/opencode/blob/148842ef7cb1bc34192b3fff57d0f9721ab9c801/packages/opencode/src/cli/cmd/run.ts) sends explicit model/variant arguments to the prompt API; the adapter must still test the end-to-end CLI path before claiming support.
+
+Earlier [v1.15.7 input-mutation issue](https://github.com/anomalyco/opencode/issues/28901) and [active-picker issue](https://github.com/anomalyco/opencode/issues/18644) concern different paths. Input-model mutation is not equivalent to changing the output user-message draft; picker persistence is not the same as a per-turn request. Neither issue alone establishes current feasibility.
+
+## Remaining acceptance
+
+End-to-end `run` flag handling, configured agent pins, cancellation, late promises, concurrent sessions, tool-loop behavior, other-plugin ordering, live ChatGPT authentication, real context caps and policy quality still require tests. The hook does not expose a client-surface identifier, so omitted selection fields in this server probe cannot establish whether a future request came from the noninteractive CLI or a UI. A reliable supported-client boundary or explicit, scoped user opt-in remains necessary before automatic routing. TUI/desktop intent is unverified and remains outside automatic support. No atomic quota/catalog/picker transaction is claimed or required for the scoped design. Development of the pure core and adapter can begin; automatic production release waits for the PRD's remaining evidence.

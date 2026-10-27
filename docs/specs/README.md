@@ -1,29 +1,24 @@
 # v0.1 domain specifications
 
-These specifications translate the [v0.1 PRD](../prd-v0.1.md) into implementable boundaries. They describe planned behavior, not implemented APIs. The PRD governs scope and release criteria if a spec is ambiguous; record and resolve contradictions before implementation. Host-specific mechanisms, public command names and persisted formats remain unverified; the versioned routing policy is a proposed implementation contract subject to the release evaluation.
+Authority: [PRD](../prd-v0.1.md) → [ADR 0001](../decisions/0001-turn-local-routing.md) → these specs. They replace the earlier host-wide transaction, entitlement-proof and durable-commit-journal proposal. Planned behavior is distinct from [runtime evidence](../host-feasibility-v1.19.4.md).
 
 | Domain | Responsibility | PRD |
 | --- | --- | --- |
-| [Host integration](host.md) | Lifecycle, host capabilities, dispatch, deadline and fallback | FR-1, FR-4 |
-| [Catalog](catalog.md) | Connection-scoped model and variant facts, snapshots and validation | FR-2 |
-| [Routing](routing.md) | Task evidence, role preferences, policy, context fit and cooldown | FR-3, FR-4 |
-| [Controls and configuration](controls.md) | Profiles, explicit choices, pins, inspection and state isolation | FR-5 |
-| [Observations](observations.md) | Opt-in local measurement and data lifecycle | FR-6 |
-| [Verification and release](verification.md) | Host spike, test matrix, performance, evaluation and release gates | Sections 7–8 |
+| [Host](host.md) | One pending draft, explicit inputs, bounded work and dispatch observation | FR-1, FR-4 |
+| [Catalog](catalog.md) | Host inventory, connected status, variants, effective limits and freshness | FR-2 |
+| [Routing](routing.md) | Assessment contract, role/effort preferences and explainable decisions | FR-3, FR-4 |
+| [Controls](controls.md) | Configuration, pins, generation and inspection | FR-5 |
+| [Observations](observations.md) | Optional local aggregates, bounds, deletion and privacy | FR-6 |
+| [Verification](verification.md) | Fixtures, real-host tests, evaluation and release evidence | Section 7 |
 
 ## Shared contracts
 
-These are conceptual fields, not a promise about the OpenCode SDK or serialized shape:
+- Selection: exact provider/model IDs and optional host variant; omitted means the host's documented default, never an invented effort.
+- Turn: session/message identity and immutable explicit-input facts, plus transient original draft selection. Do not infer user origin from equal model IDs.
+- Catalog snapshot: connected providers, model/variant data, completeness, retrieved time and configuration generation; not a remote entitlement proof.
+- Decision: `keep` or `select`, original/proposed pair, reasons, policy version and captured configuration generation. A selection is a proposal, not an applied outcome.
+- Outcome: `kept`, `proposed`, `observed` or `mismatch/unknown`. Definitive dispatch evidence is distinct from task success. Never label an unknown dispatch as applied or replay it.
 
-- **Selection:** exact host provider ID, model ID, and either a host-validated variant or an explicitly verified model default. No credential is included.
-- **Turn identity:** host-supplied session and turn IDs, with the active provider connection identity kept internal and scoped to that turn.
-- **Decision:** `keep` or `select`, current selection, optional proposed selection, profile, stable reason codes and evidence provenance. `select` requires a currently eligible model and valid variant/default. `keep` never implies task success.
-- **Catalog snapshot:** connection identity, revision or equivalent verified freshness token, eligible candidates and explicitly unknown fields. Do not treat a timestamp by itself as proof of current availability.
-- **Commit guard:** original turn identity, current connection and catalog revision, plus a version covering current selection, user-origin/scope and all router controls. The host must atomically reject a stale guard or provide proven equivalent serialization; an adapter-side read alone is insufficient.
-- **Outcome:** `kept`, `applied`, `failed/unsupported`, or `indeterminate`, with a reason and whether the original host request was observed when knowable. `indeterminate` means the adapter cannot establish whether an attempted change took effect; it is not equivalent to `kept`, `applied`, or task success. Do not replay, retry, or claim the original pair was preserved. Suspend further automatic changes, surface a bounded diagnostic, and treat any observed or possible indeterminate outcome as a failure of the host release gate until resolved and the full contract suite is rerun. Never infer a successful task from a successful dispatch.
+The adapter owns SDK/filesystem/UI interactions. Pure policy consumes validated data. All optional unknowns are explicit, never zero or false by default. The only model mutation is one final synchronous edit to the live hook draft. Configuration changes and cooldown are local session state, not distributed transactions. Other plugins and normal provider failures remain host concerns; no synthetic turn or alternate-model retry is permitted.
 
-Null/unknown is distinct from false, zero, empty, and unsupported. Host data is untrusted input; validation occurs at the boundary. Session and turn IDs must not be used as credentials and must not appear in default diagnostics. Configuration precedence and manual choice always outrank router policy. The host owns the user turn and request; a plugin must never create a replacement turn as a fallback. Contracts requiring capabilities not established by the spike are release gates, not claims that OpenCode currently exposes them.
-
-## Delivery sequence
-
-The pinned [host source review](../host-feasibility-v1.19.4.md) does not establish the required guarantees, and the proposed keyword classifier failed an [adversarial assessment](../classifier-assessment.md). Both are no-go for automatic routing, not completed host or live quality tests. Perform the pinned-host feasibility spike in [verification](verification.md) and evaluate a replacement policy before claiming automatic support. Recommendation-only catalog and policy work may proceed without mutating selections. Cross-domain tests must use the same fixtures and reason-code vocabulary.
+The [development plan](../development-plan.md) defines sequence and exit evidence. Policies or APIs absent from current evidence are implementation tests, not invented host guarantees.

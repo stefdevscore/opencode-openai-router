@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { Effect, FileSystem, Path } from "effect";
-import { Primitive } from "effect/unstable/cli";
+import { createRequire } from "node:module";
+import { pathToFileURL } from "node:url";
+
+// Follow the plugin's dependency graph, including when npm nests its dependencies.
+const pluginRequire = createRequire(import.meta.resolve("@opencode-ai/plugin"));
+const { Effect, FileSystem, Path } = await import(pathToFileURL(pluginRequire.resolve("effect")).href);
+const { Primitive } = await import(pathToFileURL(pluginRequire.resolve("effect/unstable/cli")).href);
 
 function parseToml(content) {
   const fs = FileSystem.makeNoop({
