@@ -10,7 +10,7 @@ The intended profiles are Economy, Balanced, and Quality. The design should avoi
 
 ## Development
 
-Requires Node.js and npm.
+Requires Node.js 20 or newer and npm. CI uses Node.js 24.
 
 ```sh
 npm install
@@ -24,6 +24,6 @@ The compiled plugin entry point is `dist/index.js`. For local experimentation, c
 
 CI installs locked dependencies, audits for high or critical advisories, checks types, builds, and runs the Node.js test suite on pushes and pull requests to `main` and `development`. Add new tests under `test/` using the built-in test runner. Changes reach `main` through a pull request with a passing CI check.
 
-Development dependency overrides patch advisories in the OpenCode plugin package's transitive `zod` and `toml` dependencies. Revisit the overrides when upgrading the OpenCode plugin package; `toml` is a major-version override, so compatibility must be rechecked if these dependencies are used at runtime.
+Development dependency overrides patch advisories in the OpenCode plugin package's transitive `zod` and `toml` dependencies. An integration test exercises Effect's TOML file parser with valid and invalid input. The `toml` override crosses a major version: version 5 rejects integers outside JavaScript's safe range by default, so the test does not establish compatibility for every TOML document. These dependencies are not included in the compiled plugin. Revisit the overrides when upgrading the OpenCode plugin package or using its runtime APIs.
 
 To create a GitHub release, update the package version on `main`, then push a matching tag such as `v0.1.0` pointing to a commit on `main`. The release workflow checks the tag and ancestry, repeats the checks, and attaches an npm package archive to the GitHub release. It does not publish to an npm registry; the package remains private while the plugin is a scaffold.
