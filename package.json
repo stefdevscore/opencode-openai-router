@@ -7,10 +7,19 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsc",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test"
   },
   "devDependencies": {
     "@opencode-ai/plugin": "^1.19.4",
     "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "@opencode-ai/plugin": {
+      "zod": "^4.6.7",
+      "effect": {
+        "toml": "^5.0.1"
+      }
+    }
   }
 }
