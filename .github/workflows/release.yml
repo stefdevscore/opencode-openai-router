@@ -28,6 +28,7 @@ jobs:
           test "$RELEASE_TAG" = "v$(node -p 'require("./package.json").version')"
           git merge-base --is-ancestor "$GITHUB_SHA" origin/main
       - run: npm ci
+      - run: npm audit --audit-level=high
       - run: npm run typecheck
       - run: npm test
       - name: Create package archive
