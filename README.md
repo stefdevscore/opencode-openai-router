@@ -8,9 +8,11 @@ This is a bare scaffold. The plugin loads an empty set of hooks and **does not r
 
 The intended profiles are Economy, Balanced, and Quality. The design should avoid unnecessary model switches, respect user choices, and prioritize successful outcomes over token minimization. It should not require a separate paid classification service or manage credentials. Subscription allowance savings should only be claimed when reliably measurable.
 
+See the [architecture abstract](docs/architecture.md) for the intended design and the [research note](docs/research.md) for supporting findings and implementation questions.
+
 ## Development
 
-Requires Node.js 20 or newer and npm. CI uses Node.js 24.
+Use Node.js 24 and npm for development, matching CI. Other Node.js versions have not been verified.
 
 ```sh
 npm install

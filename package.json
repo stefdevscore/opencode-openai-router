@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "exports": "./dist/index.js",
-  "files": ["dist"],
+  "files": ["dist", "docs"],
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
