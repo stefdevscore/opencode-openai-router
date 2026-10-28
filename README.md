@@ -4,7 +4,7 @@ An OpenCode v2 plugin in development for selecting an available OpenAI model and
 
 ## Status and intended behavior
 
-The package is an **inert scaffold**. Initial catalog, configuration and pure effort-decision utilities exist, but no routing, controls or observation collection runs from the plugin.
+The package is a development scaffold. User configuration and a server-side status command are implemented, but no automatic routing or observation collection runs from the plugin.
 
 The accepted design uses native session switching. With automatic routing enabled, the plugin may replace a manual model or variant choice, update the picker and leave that selection in place for later turns. Disable routing for manual control; disabling will not restore an earlier selection or reverse a switch already issued. The planned profiles are Economy, Balanced and Quality, with optional local observations. There is no recommendation-only mode.
 
@@ -27,13 +27,24 @@ npm run check:docs
 npm test
 ```
 
-The compiled entry is `dist/index.js`; `server.js` exposes it to the 2.1.4 local-directory loader. It is intentionally inert. See the [v2 plugin documentation](https://opencode.ai/v2/docs/build/plugins/) for host loading; validate APIs against the pinned SDK and binary because current online documentation may describe a newer contract.
+The compiled entry is `dist/index.js`; `server.js` exposes it to the 2.1.4 local-directory loader. No routing hook is registered yet. See the [v2 plugin documentation](https://opencode.ai/v2/docs/build/plugins/) for host loading; validate APIs against the pinned SDK and binary because current online documentation may describe a newer contract.
+
+## Controls under development
+
+For the pinned macOS target, settings are read from `$XDG_CONFIG_HOME/opencode-openai-router/config.json` when `XDG_CONFIG_HOME` is absolute, otherwise `~/.config/opencode-openai-router/config.json`. Create the file yourself if you want settings other than the automatic Balanced default:
+
+```json
+{ "mode": "off", "profile": "balanced" }
+```
+
+`mode` accepts `auto` or `off`; `profile` accepts `economy`, `balanced` or `quality`. Unknown fields and invalid values are rejected. The plugin does not create or rewrite this file and ignores project plugin options. In this cut neither mode switches models. The registered `openai-router-status` server command refreshes the file and emits bounded JSON to the server log. Isolated host API tests verified the command without a coding prompt or provider request. The desktop discovers the command, but does not display its result; desktop inspection remains incomplete. See the [controls specification](docs/specs/controls.md) for reload and failure behavior.
 
 After building, an optional credential-free probe can exercise a pinned host with a local provider:
 
 ```sh
 npm run probe:v2 -- /absolute/path/to/opencode-2.1.4
 node scripts/probe-v2-package.mjs /absolute/path/to/opencode-2.1.4
+node scripts/probe-v2-inspection.mjs /absolute/path/to/opencode-2.1.4
 ```
 
 The probe uses temporary directories and local provider fixtures. It has been exercised on macOS arm64 and is separate from ordinary CI. Run it without externally managed plugins or providers. Research scripts have different scopes, including explicitly live account tests; consult the [evidence guide](docs/evidence/README.md) before running them.

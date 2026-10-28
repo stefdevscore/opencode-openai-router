@@ -1,6 +1,16 @@
 # Configuration and inspection
 
-Status: planned v0.1 contract. Existing research and scaffold utilities do not establish full acceptance.
+Status: initial control implementation awaiting QA. No automatic routing hook is registered. Desktop command discovery was verified, but the command did not display its result in the desktop; usable desktop inspection and integration with future switching remain open.
+
+## Implemented controls
+
+On the pinned macOS target, the plugin reads `$XDG_CONFIG_HOME/opencode-openai-router/config.json` when `XDG_CONFIG_HOME` is absolute, otherwise `~/.config/opencode-openai-router/config.json`. It ignores project plugin options. A genuinely absent file at startup selects auto/Balanced; a dangling symlink or an existing file that later disappears is unreadable for that plugin instance. Restarting with no file uses the defaults again. The file is user-managed and is never created or rewritten by the plugin. Only `mode` (`auto`, `off`) and `profile` (`economy`, `balanced`, `quality`) are implemented; all other fields or malformed values are invalid. The input is bounded to 64 KiB.
+
+The earlier pinned-host fixture confirmed that project configuration can supply `ctx.options`, so options are unsuitable as the only user-owned consent and control source. Native options precedence and live reload have not been fully characterized; the implemented controls do not depend on them. A packed-plugin fixture supplies conflicting project options and verifies that the user file governs the reported control state.
+
+Startup and the `openai-router-status` server command refresh the configuration. The command emits bounded structured JSON to the server log with a status, last valid settings if any, instance generation and `routing: inactive`. Last valid settings are informational when the status is invalid or unreadable; they do not authorize mutation. Pinned-host fixtures verified the command through the host API, including changed settings in one instance, and invoked it in a fresh session without creating a message or making a provider request. An isolated desktop project showed the command in slash-command search and accepted it, but displayed no result. A synthetic notification with `resume: false` appeared as an inbox update rather than a direct status response and can affect later session input, so it is not used as an inspection interface. Interactive CLI visibility is unverified; no model or observed-dispatch status exists yet.
+
+There is no file watcher. A change becomes effective for this instance when a refresh reads it; an edit alone is not an acknowledgment. Reads are serialized, and invalid or unreadable input prevents mutation while retaining the last valid settings for diagnosis. The `issue` boundary serializes the final refresh and generation check with synchronously starting a caller-supplied operation; the caller must start the host request before returning its promise, without an intervening asynchronous step. The boundary does not wait for that promise to finish, so an accepted later disable cannot undo an already-issued operation. The future adapter must use and test this boundary with the actual host API. Disposing the instance invalidates pending reads and decisions. There is no atomic guarantee against external file changes between the last read and a host operation; effective disable means a refresh has accepted `off` before issuance.
 
 ## Configuration
 

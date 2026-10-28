@@ -8,6 +8,8 @@ import { pathToFileURL } from "node:url";
 
 test("packed plugin includes and loads the local and package entries", async () => {
   const temp = await mkdtemp(path.join(os.tmpdir(), "router-package-test-"));
+  const previous = process.env.XDG_CONFIG_HOME;
+  process.env.XDG_CONFIG_HOME = temp;
   try {
     const [archive] = JSON.parse(execFileSync("npm", ["pack", "--ignore-scripts", "--json", "--pack-destination", temp], { encoding: "utf8" }));
     const paths = new Set(archive.files.map(file => file.path));
@@ -20,8 +22,11 @@ test("packed plugin includes and loads the local and package entries", async () 
     const exported = await import(pathToFileURL(path.join(root, metadata.exports)).href);
     assert.equal(local.default, exported.default);
     assert.equal(local.default.id, "opencode.openai-router");
-    assert.equal(await local.default.setup({}), undefined);
+    const cleanup = await local.default.setup({ command: { transform: async callback => { callback({ add: () => {} }); return { dispose: async () => {} }; } } });
+    assert.equal(typeof cleanup, "function");
+    await cleanup();
   } finally {
+    if (previous === undefined) delete process.env.XDG_CONFIG_HOME; else process.env.XDG_CONFIG_HOME = previous;
     await rm(temp, { recursive: true, force: true });
   }
 });

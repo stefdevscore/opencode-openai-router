@@ -2,7 +2,7 @@
 
 - Date: 28 October 2026.
 - Scope: current source and tests, PRD, all domain specs, research evidence, package contents and CI/release configuration.
-- Decision: **ready to begin staged v2 development**. Automatic activation and publication remain gated. The plugin remains inert; development readiness does not certify a production router.
+- Decision: **staged v2 development is underway**. Automatic activation and publication remain gated. Initial user controls exist, but the plugin does not route; development readiness does not certify a production router.
 
 ## Accepted product contract
 
@@ -22,13 +22,13 @@ This removes the earlier requirement to infer manual picker intent and restore t
 
 ## Cut 1 update
 
-The v2-only foundation is implemented and awaiting user QA. The v1 entry, dependency, normalizer, process-boundary code and related tests/overrides are removed. The remaining v2 graph has no `toml` package. The pure decision/config contracts now use `auto`/`off` with no manual-selection guard; the plugin remains inert. The actual packed entry was observed active in the pinned 2.1.4 host after adding the root `server.js` needed by that version’s local-directory resolver. The table below records the prior synthesis baseline.
+The v2-only foundation is committed. The v1 entry, dependency, normalizer, process-boundary code and related tests/overrides are removed. The remaining v2 graph has no `toml` package. The pure decision/config contracts use `auto`/`off` with no manual-selection guard; no routing hook is registered. The actual packed entry was observed active in the pinned 2.1.4 host after adding the root `server.js` needed by that version’s local-directory resolver. Initial user controls are implemented and awaiting QA. The table below records the foundation baseline.
 
 ## What existed at the prior synthesis
 
 | Area | Present state | Development implication |
 | --- | --- | --- |
-| Package | Inert v2 entry, pinned v2 type dependency, clean TypeScript build, CI on both long-lived branches, publishing-disabled workflow. | Keep the release safeguard; validate the actual packaged plugin as the adapter develops. |
+| Package | Foundation had an inert v2 entry, pinned v2 type dependency, clean TypeScript build, CI on both long-lived branches, and a publishing-disabled workflow. | Keep the release safeguard; validate the actual packaged plugin as the adapter develops. |
 | Pure utilities | Initial bounded v2 catalog normalization, auto/off configuration and provisional upward-effort decisions. | Starting points only: no policy or controls are wired to the host. Complete catalog, assessment and switching contracts before integration. |
 | Host evidence | Local CLI and actual desktop fixture changed the session model and retained it on the next turn. The inert packed plugin loaded in the pinned CLI; server command registration/options were exercised. | Native switching is a feasible mechanism. Complete disable behavior, session status, deduplication, ordering, lifecycle and actual packaged-plugin switching tests. |
 | Account facts | Existing OpenAI connection responded; catalog facts and non-sensitive token-field availability were observed. | No auth management is needed. Test real variants and measurement completeness; do not infer entitlement or allowance savings. |

@@ -1,14 +1,14 @@
 # v0.1 implementation plan
 
-Status: cut 1 is implemented and awaiting user QA; later cuts remain planned. The target is OpenCode desktop 2.1.4. The product modes are `auto` (intended default) and `off`; there is no recommendation-only stage, manual role setup or model pin. The current scaffold remains inert. Develop actual automatic switching in isolated fixtures, with production release gated by [verification](specs/verification.md).
+Status: cut 1 is committed; cut 2 controls are implemented but its inspection checkpoint remains incomplete: the desktop discovers the status command but does not display its result. Later cuts remain planned. The target is OpenCode desktop 2.1.4. The product modes are `auto` (intended default) and `off`; there is no recommendation-only stage, manual role setup or model pin. No routing hook is registered. Develop actual automatic switching in isolated fixtures, with production release gated by [verification](specs/verification.md).
 
-## 1. V2-only baseline and decision contracts — implemented, awaiting review
+## 1. V2-only baseline and decision contracts — committed
 
 The legacy entry, v1 dependency, normalizer and process-boundary code/tests are removed. The remaining dependency graph has no `toml` package, so the v1 overrides and parser-specific test were removed. Archived evidence and research tools remain historical. The old manual/agent-pin guard was removed; the pure effort function returns a select/keep decision and is not connected to the host.
 
-Define shared selection, task assessment, evidence snapshot, routing decision and observed outcome types. Use `keep` or `select` internally: this separates pure decisions from host effects and does not introduce a user recommendation mode. The parser accepts `auto`/`off` and has no manual roles. The v2 entry remains inert.
+Shared selection, task assessment, evidence snapshot, routing decision and observed outcome types use `keep` or `select` internally: this separates pure decisions from host effects and does not introduce a user recommendation mode. The parser accepts `auto`/`off` and has no manual roles. No routing hook is registered.
 
-Exit evidence: clean locked install, zero audit vulnerabilities, types, focused unit tests and docs checks pass. The extracted package is independently loaded as an active plugin by the pinned 2.1.4 host alongside a local-provider fixture. User QA is pending; no router hook is registered.
+Exit evidence: clean locked install, zero audit vulnerabilities, types, focused unit tests and docs checks pass. The extracted package is independently loaded as an active plugin by the pinned 2.1.4 host alongside a local-provider fixture.
 
 ## 2. Controls and automatic host adapter
 

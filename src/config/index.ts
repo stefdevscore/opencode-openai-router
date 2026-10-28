@@ -1,12 +1,12 @@
 export type Profile = "economy" | "balanced" | "quality";
 export interface Config {
-  mode: "auto" | "off";
-  profile: Profile;
+  readonly mode: "auto" | "off";
+  readonly profile: Profile;
 }
 export type ConfigResult = { ok: true; config: Config } | { ok: false; reason: "invalid_config" };
 
 /** Validating automatic mode does not activate the inert plugin. */
-export function parseConfig(input: unknown): ConfigResult {
+export function parseConfig(input?: unknown): ConfigResult {
   if (input === undefined) input = {};
   if (typeof input !== "object" || input === null || Array.isArray(input)) return { ok: false, reason: "invalid_config" };
   const options = input as Record<string, unknown>;

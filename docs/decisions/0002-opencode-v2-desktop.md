@@ -5,7 +5,7 @@
 
 ## Decision
 
-Target OpenCode desktop 2.1.4 and its native v2 server. OpenCode v1 is outside v0.1 scope; [ADR 0001](0001-turn-local-routing.md) is historical. The current package remains inert.
+Target OpenCode desktop 2.1.4 and its native v2 server. OpenCode v1 is outside v0.1 scope; [ADR 0001](0001-turn-local-routing.md) is historical. The current package registers initial controls but does not route requests.
 
 In automatic mode, the router may use the native session model switch to select a discovered OpenAI model and supported variant. This changes the session's visible picker selection and may persist into subsequent turns; the router evaluates later eligible turns using the host's current selection and its policy. It may override a manual model or effort selection while automatic mode is enabled. Users who want manual selection can disable routing. There is no recommendation-only mode or model pin in the router.
 

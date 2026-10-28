@@ -4,7 +4,7 @@ Updated 28 October 2026. This is the current v2-only development baseline.
 
 ## Accepted behavior
 
-Automatic mode may change a manually selected model or reasoning variant through OpenCode's native session controls. The picker can change and the selection can persist to later turns. Users disable routing for manual control; disabling stops new router switches after it is effective and does not restore prior selections or cancel an already-issued host operation. There is no recommendation-only mode or manual model pin. Optional model classification runs only in the background on changed model/evidence information and requires explicit enablement and an allowance budget. The package remains inert today.
+Automatic mode may change a manually selected model or reasoning variant through OpenCode's native session controls. The picker can change and the selection can persist to later turns. Users disable routing for manual control; disabling stops new router switches after it is effective and does not restore prior selections or cancel an already-issued host operation. There is no recommendation-only mode or manual model pin. Optional model classification runs only in the background on changed model/evidence information and requires explicit enablement and an allowance budget. User controls are under development; automatic routing is not yet active.
 
 ## Reading order and authority
 

@@ -26,7 +26,9 @@ Build the scaffold first. All host probes require the exact version they name; d
 | Script or fixture | Scope |
 | --- | --- |
 | [Initial v2 probe](../../scripts/probe-v2.mjs) | Temporary XDG directories and loopback provider; credential-free. |
-| [Packed v2 probe](../../scripts/probe-v2-package.mjs) | Packs the actual plugin and verifies it is active in the pinned host alongside an independent local fixture. |
+| [Packed v2 probe](../../scripts/probe-v2-package.mjs) | Packs the actual plugin, verifies host loading and exercises control status and reload with isolated user and conflicting project settings. Desktop command visibility and switching remain unverified. |
+| [Inspection probe](../../scripts/probe-v2-inspection.mjs) | Invokes the packed plugin's status command in a fresh isolated host session and checks for zero session messages and provider requests. Does not prove desktop visibility. |
+| [Desktop controls check](v2-desktop-controls-2.1.4.json) | The desktop discovered and ran the status command in a disposable project but showed no result; synthetic input is not a safe direct status display. |
 | [Session-switch experiment](../../scripts/research-v2-session-switch.mjs) | Deliberate changes in synthetic CLI sessions only. |
 | [Effort experiment](../../scripts/research-v2-effort-override.mjs) | Local compatible-provider option override. |
 | [Controls experiment](../../scripts/research-v2-controls.mjs) | Local fixture command invoked through the host API. |
