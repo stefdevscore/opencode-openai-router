@@ -16,13 +16,13 @@ Basic native session switching is feasible. Automatic activation still needs tes
 | Capability | Finding | Remaining work |
 | --- | --- | --- |
 | Automatic discovery | The native catalog exposes model IDs, capabilities, context limits and variants. A read-only OpenAI connection check exposed 16 active/enabled models, all with tool flags, limits and variants; 90 variants had string reasoning settings. | Validate refresh, removal, partial data, provider status and effective limits. Catalog presence does not establish entitlement, quota or quality rank. |
-| Automatic model switching | Local CLI and actual desktop fixtures changed the session model and retained it on the next turn. | Implement safe admission ordering, disable/pin controls, duplicate handling, concurrency and lifecycle. |
+| Automatic model switching | Local CLI and actual desktop fixtures changed the session model and retained it on the next turn. | Implement safe admission ordering, disable controls, duplicate handling, concurrency and lifecycle. |
 | Reasoning-effort selection | A context option reached a synthetic compatible provider as `reasoning_effort: high`. | Verify native variant selection against the real OpenAI integration and correlate decisions to eligible requests. |
 | Task assessment | Cheap local heuristics are possible, but tested exploratory rules fail adversarial examples or abstain heavily. | Define and evaluate a replacement policy; no production task assessor exists. |
-| Controls | A local fixture received plugin options and registered/invoked a server command. | Verify usable desktop inspect/off/pin controls and configuration precedence. |
+| Controls | A local fixture received plugin options and registered/invoked a server command. | Verify usable desktop inspect/off controls and configuration precedence. |
 | Measurements | A sanitized fresh OpenAI session export exposed input/output/reasoning/cache fields, including nonzero input and output. | Verify accuracy, completeness and lifecycle across supported models. Tokens do not measure subscription allowance savings. |
 | Continuous improvement | Verifiable outcomes and opt-in local aggregates can support policy evaluation. | No automatic self-training or reliable general task-success signal is established. |
-| Adapting to new models | Inventory refresh can reveal new models without a plugin update. | Catalog facts do not assign coding-quality roles. Use explicit preferences or evaluated evidence. |
+| Adapting to new models | Inventory refresh can reveal new models without a plugin update. | Catalog facts do not assign coding-quality roles. Use validated external evidence and optionally budgeted model classification. |
 
 ## Host and desktop observations
 
@@ -73,6 +73,6 @@ This pilot used static model choices, no router and no repository tools. It does
 
 ## Development and release decision
 
-Development may begin with v2-only cleanup, user controls, session-state contracts and recommendations. Native session switching is the candidate application mechanism. Unknown activity, uncertain switch completion, invalid configuration or stale evidence must not authorize additional switches. Disabling does not promise rollback.
+Development may begin with v2-only cleanup, user controls, session-state contracts, background model evidence and automatic switching. Native session switching is the candidate application mechanism. Unknown activity, uncertain switch completion, invalid configuration or stale evidence must not authorize additional switches. Disabling does not promise rollback.
 
 Automatic activation requires the [host matrix](specs/host.md), a validated assessment and role/variant policy, real OpenAI variant tests and the [verification gates](specs/verification.md). The frozen 30-task paired coding evaluation and 100-trial performance gate remain pending. No experiment demonstrates an automatically improving production router or subscription allowance savings.

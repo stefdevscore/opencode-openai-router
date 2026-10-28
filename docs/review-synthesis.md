@@ -6,7 +6,7 @@
 
 ## Accepted product contract
 
-[ADR 0002](decisions/0002-opencode-v2-desktop.md) governs: OpenCode desktop 2.1.4 is the initial target; auto mode may replace a manual model/variant choice, update the picker and leave that pair selected on later turns. Users disable routing for manual control. Disabling prevents new switches after it is effective and does not restore an old selection or promise to cancel an already-issued switch. Explicit router pins and protected configured agent models remain separate controls. v1 is historical and outside product scope.
+[ADR 0002](decisions/0002-opencode-v2-desktop.md) governs: OpenCode desktop 2.1.4 is the initial target; auto mode may replace a manual model/variant choice, update the picker and leave that pair selected on later turns. Users disable routing for manual control. Disabling prevents new switches after it is effective and does not restore an old selection or promise to cancel an already-issued switch. The user subsequently removed recommendation-only behavior and model pins from the routing contract; auto mode owns selection. v1 is historical and outside product scope.
 
 This removes the earlier requirement to infer manual picker intent and restore the previous pair after each turn. The desktop fixture demonstrated basic native session switching and persistence, which now match the chosen direction. Unknown session activity, failed controls and stale results still require abstention; the user clarification does not authorize uncontrolled switching during active work.
 
@@ -20,31 +20,43 @@ This removes the earlier requirement to infer manual picker intent and restore t
 | PRD used unknown user intent as a keep reason and could imply that disabling cancels an issued session switch. | Unknown task demand keeps; auto may supersede manual selection. Distinguish late decisions that must not issue switches from issued host operations that may still complete. |
 | Verification required auxiliary calls to remain unaffected even though the accepted model change is session state. | Trigger switches only from eligible admissions and test/document their effects on later primary and auxiliary calls. Do not route title/compaction callbacks independently. |
 
-## What exists and what the evidence establishes
+## Cut 1 update
+
+The v2-only foundation is implemented and awaiting user QA. The v1 entry, dependency, normalizer, process-boundary code and related tests/overrides are removed. The remaining v2 graph has no `toml` package. The pure decision/config contracts now use `auto`/`off` with no manual-selection guard; the plugin remains inert. The actual packed entry was observed active in the pinned 2.1.4 host after adding the root `server.js` needed by that version’s local-directory resolver. The table below records the prior synthesis baseline.
+
+## What existed at the prior synthesis
 
 | Area | Present state | Development implication |
 | --- | --- | --- |
-| Package | Inert dual entry, pinned v1/v2 type dependencies, clean TypeScript build, CI on both long-lived branches, publishing-disabled workflow. | Remove the unused v1 surface first; keep the release safeguard. |
-| Pure utilities | Bounded v2 catalog normalization, validated recommendation/off configuration and initial upward-effort recommendation. | Starting points only: config rejects auto, roles do not select models, and the old explicit-selection guard conflicts with the new product behavior. Refactor before integration. |
-| Host evidence | Local CLI and actual desktop fixture changed the session model and retained it on the next turn. Server command registration/options were exercised. | Native switching is a feasible mechanism. Complete disable/pin behavior, session status, deduplication, ordering, lifecycle and actual packaged-plugin tests. |
+| Package | Inert v2 entry, pinned v2 type dependency, clean TypeScript build, CI on both long-lived branches, publishing-disabled workflow. | Keep the release safeguard; validate the actual packaged plugin as the adapter develops. |
+| Pure utilities | Initial bounded v2 catalog normalization, auto/off configuration and provisional upward-effort decisions. | Starting points only: no policy or controls are wired to the host. Complete catalog, assessment and switching contracts before integration. |
+| Host evidence | Local CLI and actual desktop fixture changed the session model and retained it on the next turn. The inert packed plugin loaded in the pinned CLI; server command registration/options were exercised. | Native switching is a feasible mechanism. Complete disable behavior, session status, deduplication, ordering, lifecycle and actual packaged-plugin switching tests. |
 | Account facts | Existing OpenAI connection responded; catalog facts and non-sensitive token-field availability were observed. | No auth management is needed. Test real variants and measurement completeness; do not infer entitlement or allowance savings. |
 | Policy | Toy rules fail adversarial examples; 500 external human-time labels provide an independent proxy, not AI-model routing labels. | Define and evaluate a replacement assessment. Do not ship the exploratory rules as the policy. |
 | Live coding | Four static-model attempts on two synthetic pure-function tasks passed their checks. | Pilot only; no router, repository tool use, paired-profile quality result or savings result exists. |
 
 The desktop test used a disposable project in the existing app and shared session database. Its test tab/project entry were closed and provider stopped; synthetic sessions remain in history. Local models were absent from picker search, so explicit picker re-selection and variant paths were not exercised. The research report discloses this; it is not full production desktop acceptance.
 
-## First implementation changes
+## Implementation sequence and readiness
 
-1. **v2-only baseline:** remove legacy entry, v1 dependency/overrides and unused boundary/normalizer/tests; review whether TOML coverage still applies to the resulting dependency graph. Keep historical evidence. Adapt the existing pure recommendation contract to the accepted behavior. Exit with clean install, audit, tests and a complete extracted package.
-2. **Controls and host contract:** implement one validated user configuration mechanism, deterministic inspect/off/pin controls and instance/session state. Prototype verified session activity, same-session admission serialization and disable-before/after-switch ordering against a local provider. Recommendation mode remains the default. If a host path cannot be proven, keep on that path rather than block unrelated development.
-3. **Recommendation policy:** specify bounded inputs, thresholds and abstention, complete catalog facts and user role mapping, and freeze independent behavioral fixtures. Exercise all profiles without host mutation. Model names and catalog size do not supply quality ranks.
-4. **Native adapter:** wire eligible recommendations to session switching after the contract tests pass; observe model and effort separately, session persistence, controls, active/queued work, duplicate admissions, cancellation, concurrency and other plugins in the actual packaged v2 plugin and desktop.
-5. **Release acceptance:** implement opt-in observations, performance measurement, the frozen 30-task baseline/profile coding evaluation, installed-package checks and rollback, then dry-run the build-once approval workflow before any automatic release.
+1. The v2-only foundation removes the manual-selection/agent-pin guard and recommendation-only configuration. Its provisional pure decision is not the final policy.
+2. Build effective controls and the native automatic adapter in isolated fixtures; verify same-session ordering, disable timing, active/queued work, disposal and actual model/effort dispatch. No recommendation-only milestone is required.
+3. Build catalog normalization and background model evidence, including an isolated classifier experiment through the existing host connection with explicit allowance limits. Prove source coverage, identity, grounded output, change-based caching, budget enforcement and no classifier recursion. A separate paid service is not silently introduced.
+4. Implement bounded local task assessment and evidence-based profile selection, then exercise real automatic switches. No user-assigned roles, manual model pins or per-task classifier calls are required.
+5. Complete opt-in observations, cold/warm overhead measurements, held-out classifier tests and the frozen paired coding corpus, then package/rollback and release dry-run.
 
-Exact config transport, safe host activity signals, policy features and observation storage path are explicit implementation deliverables. They are not established facts or prerequisites for beginning the first change. The [domain specs](specs/README.md) and [development plan](development-plan.md) define their acceptance criteria.
+The [development plan](development-plan.md) gives delivery dependencies. Config transport, reliable host activity, evidence-source coverage, classifier transport/bootstrap, enforceable budget units, policy thresholds and storage path are implementation deliverables. They are not established facts. A missing source or classifier limits ranking coverage and triggers keep behavior; it does not authorize invented quality claims or block unrelated implementation.
+
+## Additional conflicts resolved
+
+- Removed recommendation-only development defaults, mandatory manual roles and pin precedence from active product requirements. The modes are auto/off; automatic switching is developed directly.
+- Replaced the blanket paid-classifier ban with a distinction between optional low-frequency model classification and per-task assessment. The former may consume a disclosed budget; the latter remains local. Separate API credentials/billing are not a v0.1 requirement.
+- Separated the host inventory, public model evidence and classifier interpretation. Exact identity, provenance, comparable settings and grounded output govern ranking; schema compliance and model self-confidence are not quality proof.
+- Aligned disabled behavior across routing and background jobs: no new dispatch after effective disable; already-issued work may finish without applying a coding-session switch. No rollback is promised.
+- Added cold-cache, evidence-change and classifier-budget tests and separated their usage from warmed per-task routing performance. Historical results remain narrow fixture evidence.
 
 ## Verification of the scaffold
 
-Fresh locked installation, typecheck, nine existing tests, documentation checks, dependency audit and whitespace checks passed. The audit reported zero vulnerabilities; npm also reported upstream deprecation/install-script notices, which are not a compatibility guarantee or advisory finding. Local default runtime was Node.js 26.12.1. Typecheck, all nine tests and documentation checks also passed on Node.js 24.22.1, matching the CI major version. Existing tests include legacy v1 coverage and must not be presented as v2 routing coverage.
+Fresh locked installation, typecheck, six foundation tests, documentation checks, dependency audit and whitespace checks passed on Node.js 24.21.0, matching the CI major version. The audit reported zero vulnerabilities; npm also reported upstream deprecation notices, which are not a compatibility guarantee or advisory finding. The foundation tests do not establish v2 routing coverage.
 
-The private development archive includes the referenced research inputs; its extracted documentation links and evidence JSON passed and its inert v2 entry loaded without development dependencies. These are scaffold checks, not release provenance or package routing acceptance. CI configuration targets Node.js 24 and pushes/PRs to both `main` and `development`; the documentation cleanup must pass remote CI when pushed. Release readiness explicitly fails instead of publishing.
+The private development archive includes the referenced research inputs; its extracted documentation links and evidence JSON passed and its inert v2 entry loaded without development dependencies. The current package test checks extracted entries in CI, and a separate local-provider probe loaded the packed plugin in the pinned CLI. These are scaffold checks, not release provenance or package routing acceptance. CI configuration targets Node.js 24 and pushes/PRs to both `main` and `development`; these changes must pass remote CI when pushed. Release readiness explicitly fails instead of publishing.

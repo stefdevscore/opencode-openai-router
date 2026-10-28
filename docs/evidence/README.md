@@ -10,7 +10,7 @@ These records support the [feasibility assessment](../v2-product-feasibility.md)
 | [Session switch 2.1.4](v2-session-switch-2.1.4.json) | CLI session switch and subsequent-turn persistence. | Synthetic local provider. |
 | [Desktop session switch](v2-desktop-session-switch-2.1.4.json) | Actual desktop picker change, provider dispatch and next-turn persistence. | CLI-seeded session; local models absent from picker search. |
 | [Effort override](v2-effort-override-2.1.4.json) | Reasoning option reached a compatible local provider. | Does not establish real OpenAI variants or full turn correlation. |
-| [Controls](v2-controls-2.1.4.json) | Plugin options and server command registration/invocation. | Does not establish a complete desktop off/pin/inspection experience. |
+| [Controls](v2-controls-2.1.4.json) | Plugin options and server command registration/invocation. | Does not establish a complete desktop off/inspection experience. |
 | [Initial policy exploration](policy-exploration-v1.json) | Keep, keyword and guarded rules on 24 synthetic examples. | Investigator-authored labels and rules. |
 | [Policy stress set](policy-holdout-v1.json) | Fixed rules on 15 later adversarial examples. | Constructed stress test, not independent or representative. |
 | [External annotations](independent-assessment-v1.json) | Fixed rules on 500 externally annotated issues. | Human completion time is not an AI routing label. |
@@ -26,6 +26,7 @@ Build the scaffold first. All host probes require the exact version they name; d
 | Script or fixture | Scope |
 | --- | --- |
 | [Initial v2 probe](../../scripts/probe-v2.mjs) | Temporary XDG directories and loopback provider; credential-free. |
+| [Packed v2 probe](../../scripts/probe-v2-package.mjs) | Packs the actual plugin and verifies it is active in the pinned host alongside an independent local fixture. |
 | [Session-switch experiment](../../scripts/research-v2-session-switch.mjs) | Deliberate changes in synthetic CLI sessions only. |
 | [Effort experiment](../../scripts/research-v2-effort-override.mjs) | Local compatible-provider option override. |
 | [Controls experiment](../../scripts/research-v2-controls.mjs) | Local fixture command invoked through the host API. |

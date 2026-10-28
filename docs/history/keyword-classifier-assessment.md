@@ -1,6 +1,7 @@
 # v0.1 keyword classifier: adversarial assessment
 
 - Date: 27 October 2026.
+- Historical scope: this rejects a per-task keyword assessment. The former blanket classifier prohibition below is superseded by the [background model-evidence contract](../specs/model-evidence.md); optional model classification is a separate operation.
 - Verdict: historical keyword policy rejected for automatic routing.
 
 The former keyword rules were exercised against 12 synthetic examples with a standalone transcription. This is an exploratory counterexample exercise, not the frozen 30-task evaluation, a representative sample, or a measure of model quality. Expected labels below are reviewer judgments, not objective ground truth. The [current routing spec](../specs/routing.md) requires a replacement assessment design and evaluated recommendations before automatic release.
