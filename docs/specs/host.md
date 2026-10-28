@@ -1,6 +1,6 @@
 # OpenCode v2 host adapter
 
-Status: planned v0.1 contract. Existing research and scaffold utilities do not establish full acceptance.
+Status: cut 3 is in progress. An unregistered adapter implements the decision and issuance boundary and has unit tests. A 2.2 CLI fixture observed native model and effort switches and subsequent-turn persistence, using synthetic safety evidence; it does not establish the required host activity/identity checks or desktop acceptance. See the [host investigation](../evidence/v2-host-adapter-2.2.0.md) for the pinned API limitations. The installed plugin remains non-routing.
 
 ## Target and session behavior
 
