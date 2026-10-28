@@ -2,9 +2,9 @@
 
 Research snapshot: 27 October 2026. This document describes the intended structure, not implemented behavior.
 
-**Historical research note:** the runtime investigation and [ADR 0001](decisions/0001-turn-local-routing.md) supersede the source-only feasibility assumptions and implementation gates below. Current implementation authority is the [PRD](prd-v0.1.md), [specs](specs/README.md) and [development plan](development-plan.md). Star counts and community descriptions are dated context, not current support or adoption guarantees.
+**Archived research snapshot.** Host assumptions, model-control requirements, star counts and implementation proposals below describe the investigation on 27 October. They do not govern current development. Use the [documentation index](../README.md), [PRD](../prd-v0.1.md) and [ADR 0002](../decisions/0002-opencode-v2-desktop.md) for the accepted v2-only session-routing design.
 
-The [architecture abstract](architecture.md) presents the project's intended design at a higher level. This note retains the supporting findings and questions for implementation.
+The [architecture abstract](../architecture.md) presents the project's intended design at a higher level. This note retains the supporting findings and questions for implementation.
 
 ## What we learned
 
@@ -15,13 +15,13 @@ The [architecture abstract](architecture.md) presents the project's intended des
 
 These examples are useful design references, not direct competitors or evidence that their approaches meet our requirements. Star counts are repository-wide snapshots, not usage or quality measurements.
 
-## Host API constraints
+## Historical host API assumptions
 
 The current scaffold targets the `@opencode-ai/plugin` 1.x type contract; the locally installed OpenCode reports 1.3.13, whereas the project's locked plugin types are 1.19.4. Those versions have not been demonstrated to be compatible. For the locked types, `chat.message` receives a model and variant in its input and a mutable user message in its output; `chat.params` receives a model as input and exposes request parameters in its output. The types alone do **not** establish when model or variant changes take effect, how the UI reflects them, or how explicit user choices are distinguished from defaults. [An upstream model-switching issue](https://github.com/anomalyco/opencode/issues/28901) illustrates why this needs an actual host test.
 
 [OpenCode v2 documents a different plugin API](https://dev.opencode.ai/v2/docs/build/plugins/migrate-v1), including model listing and session hooks. Its API and packaging must not be assumed to work in 1.x. Start by investigating a supported 1.x range against the real host, then add a separate v2 adapter only when its runtime and behavior are verified. Do not claim cross-version support from types alone.
 
-## Chosen structure
+## Structure proposed at the time
 
 Keep a single package and create modules only as features are implemented:
 
@@ -43,7 +43,7 @@ docs/
 
 This is a target layout, not a requirement to create empty files. The host adapter supplies facts and executes a decision; routing is pure, deterministic, and independently testable. It returns a recommendation with reasons and an explicit `keep current` result. Host types, SDK calls, filesystem access, and UI details stay outside the routing core. Do not add an additional UI, authentication system, provider, agent orchestration layer, or paid classification service.
 
-## Routing boundaries
+## Routing boundaries proposed at the time
 
 1. Read the host's available model inventory and normalize only metadata actually present, including OpenAI provider identity, context limits, capabilities and variants where available. Missing metadata means unknown, not zero or an inferred capability. Availability can be connection-specific: catalog presence alone does not prove access.
 2. Assess a prompt and conversation using bounded, local signals. Start with conservative deterministic rules and a `keep current` option. Do not infer that a model is better just from its name or its context size; the catalog may not contain enough evidence to rank capability. Profiles adjust policy only where a defensible signal exists. If a decision is ambiguous, leave the current selection alone and explain why.
@@ -55,7 +55,7 @@ This is a target layout, not a requirement to create empty files. The host adapt
 
 Preferences, session overrides, and local observations are separate. Persist only what is needed, use a documented local storage location and retention policy, avoid prompts, source code, credentials and raw conversation content, and make collection explicitly opt-in. Missing usage, latency or cache data stays unknown. Respect host-provided counters and distinguish measurable tool/test outcomes from subjective success. Do not infer subscription allowance savings from tokens or API price metadata.
 
-## Implementation gates
+## Implementation gates proposed at the time
 
 1. **Host spike:** run a minimal plugin against explicitly pinned OpenCode versions and a scripted or local test provider. Verify discovery, model and variant changes for the next actual request, UI state, explicit user overrides, errors, and CLI/desktop behavior. Include multi-turn and concurrent-session isolation. Record which host/version supports each behavior.
 2. **Catalog and recommendations:** normalize dynamic inventory and expose explainable decisions without mutating selection. Test missing, retired, unavailable and changing models and unknown capabilities.

@@ -1,0 +1,108 @@
+{
+  "version": "opencode v2.1.4",
+  "scope": "isolated fixture only; context option test with openai-compatible provider",
+  "events": [
+    {
+      "type": "setup",
+      "id": "opencode.openai-router"
+    },
+    {
+      "type": "prompt",
+      "keys": [
+        "sessionID",
+        "messageID",
+        "prompt",
+        "metadata",
+        "delivery"
+      ],
+      "promptKeys": [
+        "text",
+        "files",
+        "agents",
+        "skills"
+      ],
+      "matchesFixture": true
+    },
+    {
+      "type": "catalog",
+      "localModels": [
+        "probe-b",
+        "probe-a"
+      ]
+    },
+    {
+      "type": "context",
+      "keys": [
+        "sessionID",
+        "model",
+        "system",
+        "messages",
+        "options",
+        "agent",
+        "tools"
+      ],
+      "optionKeys": [
+        "maxTokens"
+      ]
+    },
+    {
+      "type": "setup",
+      "id": "opencode.openai-router"
+    },
+    {
+      "type": "prompt",
+      "keys": [
+        "sessionID",
+        "messageID",
+        "prompt",
+        "metadata",
+        "delivery"
+      ],
+      "promptKeys": [
+        "text",
+        "files",
+        "agents",
+        "skills"
+      ],
+      "matchesFixture": false
+    },
+    {
+      "type": "catalog",
+      "localModels": [
+        "probe-b",
+        "probe-a"
+      ]
+    },
+    {
+      "type": "context",
+      "keys": [
+        "sessionID",
+        "model",
+        "system",
+        "messages",
+        "options",
+        "agent",
+        "tools"
+      ],
+      "optionKeys": [
+        "maxTokens"
+      ]
+    }
+  ],
+  "firstRequests": [
+    {
+      "model": "probe-a",
+      "reasoningEffort": null
+    },
+    {
+      "model": "probe-a",
+      "reasoningEffort": "high"
+    }
+  ],
+  "followupRequests": [
+    {
+      "model": "probe-a",
+      "reasoningEffort": "high"
+    }
+  ]
+}

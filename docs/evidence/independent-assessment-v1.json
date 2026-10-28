@@ -1,0 +1,85 @@
+{
+  "source": "SWE-bench/SWE-bench_Verified",
+  "fixtureCount": 500,
+  "labelMeaning": "human completion-time estimate, not a model-routing quality label",
+  "results": {
+    "keep": {
+      "matrix": {
+        "<15 min fix": {
+          "simple": 0,
+          "complex": 0,
+          "unknown": 194
+        },
+        "15 min - 1 hour": {
+          "simple": 0,
+          "complex": 0,
+          "unknown": 261
+        },
+        "1-4 hours": {
+          "simple": 0,
+          "complex": 0,
+          "unknown": 42
+        },
+        ">4 hours": {
+          "simple": 0,
+          "complex": 0,
+          "unknown": 3
+        }
+      },
+      "longInputTruncated": 2,
+      "millisecondsForBatch": 0.3467500000000001
+    },
+    "keyword": {
+      "matrix": {
+        "<15 min fix": {
+          "simple": 12,
+          "complex": 8,
+          "unknown": 174
+        },
+        "15 min - 1 hour": {
+          "simple": 30,
+          "complex": 18,
+          "unknown": 213
+        },
+        "1-4 hours": {
+          "simple": 2,
+          "complex": 2,
+          "unknown": 38
+        },
+        ">4 hours": {
+          "simple": 0,
+          "complex": 0,
+          "unknown": 3
+        }
+      },
+      "longInputTruncated": 2,
+      "millisecondsForBatch": 2.5366659999999968
+    },
+    "guarded": {
+      "matrix": {
+        "<15 min fix": {
+          "simple": 0,
+          "complex": 8,
+          "unknown": 186
+        },
+        "15 min - 1 hour": {
+          "simple": 0,
+          "complex": 18,
+          "unknown": 243
+        },
+        "1-4 hours": {
+          "simple": 0,
+          "complex": 2,
+          "unknown": 40
+        },
+        ">4 hours": {
+          "simple": 0,
+          "complex": 0,
+          "unknown": 3
+        }
+      },
+      "longInputTruncated": 2,
+      "millisecondsForBatch": 4.070875000000001
+    }
+  }
+}

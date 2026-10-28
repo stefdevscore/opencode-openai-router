@@ -1,22 +1,24 @@
 # opencode-openai-router
 
-A planned OpenCode plugin for selecting an available OpenAI model and reasoning effort appropriate to each coding task. It is intended to work with OpenCode's existing model catalog, authentication, and coding workflow.
+An OpenCode v2 plugin in development for selecting an available OpenAI model and reasoning effort appropriate to coding work. It uses OpenCode's existing authentication, model catalog and coding engine.
 
-## Status
+## Status and intended behavior
 
-The plugin loads an empty set of hooks and **does not route models, collect data, or change OpenCode's behavior yet**. Pure catalog/configuration utilities and an effort recommender exist for testing, but are not wired to OpenCode and do not assess prompts. Automatic routing, controls, safe fallbacks, and local performance measurement are future work.
+The package is an **inert scaffold**. Initial catalog, configuration and effort-recommendation utilities exist, but no routing, controls or observation collection runs from the plugin.
 
-The intended profiles are Economy, Balanced, and Quality. The design should avoid unnecessary model switches, respect user choices, and prioritize successful outcomes over token minimization. It should not require a separate paid classification service or manage credentials. Subscription allowance savings should only be claimed when reliably measurable.
+The accepted design uses native session switching. With automatic routing enabled, the plugin may replace a manual model or variant choice, update the picker and leave that selection in place for later turns. Disable routing for manual control; disabling will not restore an earlier selection or reverse a switch already issued. The planned profiles are Economy, Balanced and Quality, with optional router pins and local observations.
 
-See the [architecture abstract](docs/architecture.md) for the intended design and the [research note](docs/research.md) for supporting findings and implementation questions.
+The initial target is OpenCode desktop **2.1.4**. Basic session switching has been observed in a desktop/local-provider fixture. Safe admission ordering, effective controls, policy quality and production compatibility remain implementation and release work. Catalog discovery does not establish model quality, account entitlement or subscription allowance savings.
 
-The [v0.1 product requirements](docs/prd-v0.1.md) define the release scope, acceptance criteria, and host compatibility gates. The [domain specifications](docs/specs/README.md) describe the planned contracts and verification for each part of the plugin.
+## Documentation
 
-Start with the [development plan](docs/development-plan.md) and [review synthesis](docs/review-synthesis.md). The [v1 host probe](docs/host-feasibility-v1.19.4.md) verifies basic local-provider routing and variant behavior. The [v2 desktop report](docs/host-feasibility-v2.1.4.md) records the separate desktop compatibility findings. The [old classifier](docs/classifier-assessment.md) remains rejected; real policy quality and production compatibility are release work.
+Start with the [documentation index](docs/README.md). The [architecture abstract](docs/architecture.md) describes the design, the [PRD](docs/prd-v0.1.md) defines v0.1, and the [development plan](docs/development-plan.md) sequences the work. The [review synthesis](docs/review-synthesis.md) records development readiness, while the [feasibility assessment](docs/v2-product-feasibility.md) distinguishes experiments from product guarantees.
+
+The v1 report and earlier research are retained under [history](docs/history/README.md). v1 support is outside scope; removing legacy source and dependencies is the first implementation task.
 
 ## Development
 
-Use Node.js 24 and npm for development, matching CI. Other Node.js versions have not been verified.
+Use Node.js 24 and npm, matching CI:
 
 ```sh
 npm ci
@@ -25,21 +27,20 @@ npm run check:docs
 npm test
 ```
 
-The compiled plugin entry point is `dist/index.js`. It is intentionally inert at this stage. See the [v1 plugin documentation](https://opencode.ai/docs/plugins/) and [v2 plugin documentation](https://opencode.ai/v2/docs/build/plugins/) for version-specific loading and API details.
+The compiled entry is `dist/index.js`. It is intentionally inert. See the [v2 plugin documentation](https://opencode.ai/v2/docs/build/plugins/) for host loading; validate APIs against the pinned SDK and binary because current online documentation may describe a newer contract.
 
-An optional credential-free host probe uses a pinned OpenCode binary and an isolated local provider:
+After building, an optional credential-free probe can exercise a pinned host with a local provider:
 
 ```sh
-npm run probe:host -- /absolute/path/to/opencode-v1
-npm run probe:v2 -- /absolute/path/to/opencode-v2
+npm run probe:v2 -- /absolute/path/to/opencode-2.1.4
 ```
 
-These probes do not use the user's provider credentials or modify the global host installation. Run it in an environment without externally managed OpenCode plugins or providers. It is separate from ordinary CI and has been exercised on macOS arm64 against 1.19.4; see the report for limitations. The package version `0.1.0-dev.0` identifies this scaffold, not a released automatic router.
+The probe uses temporary directories and local provider fixtures. It has been exercised on macOS arm64 and is separate from ordinary CI. Run it without externally managed plugins or providers. Research scripts have different scopes, including explicitly live account tests; consult the [evidence guide](docs/evidence/README.md) before running them.
 
 ## CI and releases
 
-CI installs locked dependencies, audits for high or critical advisories, checks types and local documentation links, builds clean output, and runs the Node.js test suite on pushes and pull requests to `main` and `development`. Add new tests under `test/` using the built-in test runner. Changes reach `main` through a pull request with a passing CI check.
+CI installs locked dependencies, audits high/critical advisories, checks types and documentation, and runs the Node.js tests for pushes and pull requests targeting `main` and `development`. Add tests under `test/`. Existing tests include legacy v1 checks and do not establish v2 routing acceptance.
 
-Development dependency overrides patch advisories in the OpenCode plugin package's transitive `zod` and `toml` dependencies. An integration test exercises Effect's TOML file parser with valid and invalid input. The `toml` override crosses a major version: version 5 rejects integers outside JavaScript's safe range by default, so the test does not establish compatibility for every TOML document. These dependencies are not included in the compiled plugin. Revisit the overrides when upgrading the OpenCode plugin package or using its runtime APIs.
+The current scaffold still carries a v1 plugin dependency with overrides for transitive `zod` and `toml` advisories. Its TOML compatibility test exercises Effect's parser, including the newer parser's safe-integer behavior. Review and retire these dependencies and their tests during v2-only cleanup. They are not bundled into the compiled entry.
 
-The tagged release workflow is disabled while the required release-evidence and approval gates are designed and verified. It does not publish to an npm registry; the package remains private while the plugin is a scaffold. See the [verification specification](docs/specs/verification.md) before enabling releases.
+The package remains private at `0.1.0-dev.0`. The release-readiness workflow explicitly fails instead of publishing until the [release gates](docs/specs/verification.md) are implemented and verified.

@@ -1,16 +1,18 @@
-# ADR 0002: investigate the native v2 desktop boundary
+# ADR 0002: use session-level routing on OpenCode v2
 
-- Status: accepted target; automatic adapter unresolved.
-- Date: 27 October 2026.
+- Status: accepted product direction; implementation and release gates remain open.
+- Updated: 28 October 2026.
 
 ## Decision
 
-Make OpenCode desktop 2.1.4 the primary compatibility target, with the 1.19.4 CLI adapter described in [ADR 0001](0001-turn-local-routing.md) treated separately. The package exposes an inert v2 `setup` entry and an inert v1 `server` entry. An isolated fixture has loaded the v2 entry and accessed its prompt hook and model inventory; this is not an automatic router.
+Target OpenCode desktop 2.1.4 and its native v2 server. OpenCode v1 is outside v0.1 scope; [ADR 0001](0001-turn-local-routing.md) is historical. The current package remains inert.
 
-The v2 [plugin API](https://opencode.ai/v2/docs/build/plugins/) and [server hooks](https://opencode.ai/v2/docs/build/plugins/server/) differ from the v1 draft mutation boundary. The documented session model switch affects session state. Its timing and interaction with explicit selections, picker state, other plugins and subsequent turns have not been established here. A context hook exposes request options, but its compatibility with user-chosen variants and other settings is also unverified. Do not assume either API preserves the PRD's user-choice and turn-scope guarantees.
+In automatic mode, the router may use the native session model switch to select a discovered OpenAI model and supported variant. This changes the session's visible picker selection and may persist into subsequent turns; the router evaluates later eligible turns using the host's current selection and its policy. It may override a manual model or effort selection while automatic mode is enabled. Users who want manual selection can disable routing; an explicit router pin remains a separate user control.
 
-Before enabling v2 mutations, identify a supported boundary or revise the product contract through an explicit decision. Test desktop and CLI selections, model-only and effort-only choices, configured agent pins, subsequent turns, tool continuations, errors, cancellation, concurrency, plugin ordering and lifecycle using the real pinned host and a scripted local provider. Unknown selection intent keeps the existing pair. A successful account smoke test does not replace these tests or the policy quality gate.
+The [desktop experiment](../v2-product-feasibility.md) observed the switch, visible picker update and following-turn persistence with a local provider. This supports the session-level direction; it does not establish a complete adapter, safe concurrency, quality, native controls or real OpenAI variant behavior. The earlier turn-local/manual-override requirement and the prior no-go conclusion based on it are superseded by the user's decision, not by new host evidence.
 
-## Consequences
+## Conditions
 
-Pure catalog, configuration and recommendation components may advance independently. They do not perform routing. The existing v1 decision remains applicable only to its pinned v1 adapter; it is not evidence that its turn-local hook exists in v2. No release or quality claims follow from plugin loading or provider connectivity alone. See the [v2 evidence report](../host-feasibility-v2.1.4.md).
+Implement in recommendation mode first. Before enabling automatic mode, prove a reliable enable/disable path, generation and admission ordering, failures, same-session concurrency, active and queued turns, cancellation, late work, plugin ordering, host reload and actual provider dispatch. A switch changes session state and may affect active work; if the host cannot reliably establish a safe boundary, abstain for that situation. Disabling prevents new router switches after the disable is effective; it does not restore a prior selection, reverse a completed switch, or promise to cancel an already-issued host operation. Test and document this boundary and failure behavior.
+
+Configured router pins and disabled mode take precedence over policy. Existing explicit agent model settings remain protected unless a subsequent product decision changes that scope. No credential handling, replacement provider, extra user prompt or plugin-owned retries. Effort behavior and supported variants must be observed on the target host before activation. Policy, live evaluation, performance and release gates remain in force. No savings or coding-quality claims follow from the switch experiment alone.

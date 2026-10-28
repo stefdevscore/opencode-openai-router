@@ -10,17 +10,20 @@ async function markdownFiles(directory) {
   }
   return result;
 }
-const files = ["README.md", ...await markdownFiles("docs")];
+const files = ["README.md", ...await markdownFiles("docs"), ...await markdownFiles("research")];
 const failures = [];
-const evidence = "docs/evidence/host-1.19.4.json";
-try {
-  const report = JSON.parse(await readFile(evidence, "utf8"));
-  if (report.hostVersion !== "1.19.4" || report.results?.length !== 5 || report.providerRequests?.length !== 5 || report.cliResults?.length !== 4) {
-    failures.push(`${evidence}: incomplete pinned-host evidence`);
-  }
-} catch {
-  failures.push(`${evidence}: missing or invalid JSON evidence`);
+// Active compatibility evidence is v2; historical v1 results are not an acceptance gate.
+for (const name of await readdir("docs/evidence")) {
+  if (!name.endsWith(".json")) continue;
+  try { JSON.parse(await readFile(path.join("docs/evidence", name), "utf8")); }
+  catch { failures.push(`docs/evidence/${name}: invalid JSON evidence`); }
 }
+try {
+  const report = JSON.parse(await readFile("docs/evidence/host-2.1.4.json", "utf8"));
+  if (report.version !== "opencode v2.1.4" || !report.events?.some(event => event.type === "catalog" && event.localModels?.includes("probe-a")) || !report.requests?.some(request => request.model === "probe-a")) {
+    failures.push("docs/evidence/host-2.1.4.json: incomplete v2 loader/catalog evidence");
+  }
+} catch { failures.push("docs/evidence/host-2.1.4.json: missing or invalid evidence"); }
 for (const file of files) {
   const source = await readFile(file, "utf8");
   for (const [index, line] of source.split("\n").entries()) {

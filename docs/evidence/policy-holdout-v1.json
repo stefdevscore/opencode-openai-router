@@ -1,0 +1,309 @@
+{
+  "fixtureCount": 15,
+  "results": {
+    "keep": {
+      "matrix": {
+        "simple": {
+          "simple": 0,
+          "complex": 0,
+          "unknown": 5
+        },
+        "complex": {
+          "simple": 0,
+          "complex": 0,
+          "unknown": 5
+        },
+        "ambiguous": {
+          "simple": 0,
+          "complex": 0,
+          "unknown": 5
+        }
+      },
+      "falseDownshiftIds": [],
+      "millisecondsForBatch": 0.020874999999996646,
+      "rows": [
+        {
+          "id": "hs01",
+          "label": "simple",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hs02",
+          "label": "simple",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hs03",
+          "label": "simple",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hs04",
+          "label": "simple",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hs05",
+          "label": "simple",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hc01",
+          "label": "complex",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hc02",
+          "label": "complex",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hc03",
+          "label": "complex",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hc04",
+          "label": "complex",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hc05",
+          "label": "complex",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hu01",
+          "label": "ambiguous",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hu02",
+          "label": "ambiguous",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hu03",
+          "label": "ambiguous",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hu04",
+          "label": "ambiguous",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hu05",
+          "label": "ambiguous",
+          "prediction": "unknown"
+        }
+      ]
+    },
+    "keyword": {
+      "matrix": {
+        "simple": {
+          "simple": 2,
+          "complex": 0,
+          "unknown": 3
+        },
+        "complex": {
+          "simple": 2,
+          "complex": 0,
+          "unknown": 3
+        },
+        "ambiguous": {
+          "simple": 3,
+          "complex": 0,
+          "unknown": 2
+        }
+      },
+      "falseDownshiftIds": [
+        "hc01",
+        "hc02",
+        "hu02",
+        "hu04",
+        "hu05"
+      ],
+      "millisecondsForBatch": 0.3745830000000012,
+      "rows": [
+        {
+          "id": "hs01",
+          "label": "simple",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hs02",
+          "label": "simple",
+          "prediction": "simple"
+        },
+        {
+          "id": "hs03",
+          "label": "simple",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hs04",
+          "label": "simple",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hs05",
+          "label": "simple",
+          "prediction": "simple"
+        },
+        {
+          "id": "hc01",
+          "label": "complex",
+          "prediction": "simple"
+        },
+        {
+          "id": "hc02",
+          "label": "complex",
+          "prediction": "simple"
+        },
+        {
+          "id": "hc03",
+          "label": "complex",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hc04",
+          "label": "complex",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hc05",
+          "label": "complex",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hu01",
+          "label": "ambiguous",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hu02",
+          "label": "ambiguous",
+          "prediction": "simple"
+        },
+        {
+          "id": "hu03",
+          "label": "ambiguous",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hu04",
+          "label": "ambiguous",
+          "prediction": "simple"
+        },
+        {
+          "id": "hu05",
+          "label": "ambiguous",
+          "prediction": "simple"
+        }
+      ]
+    },
+    "guarded": {
+      "matrix": {
+        "simple": {
+          "simple": 2,
+          "complex": 0,
+          "unknown": 3
+        },
+        "complex": {
+          "simple": 2,
+          "complex": 0,
+          "unknown": 3
+        },
+        "ambiguous": {
+          "simple": 1,
+          "complex": 0,
+          "unknown": 4
+        }
+      },
+      "falseDownshiftIds": [
+        "hc01",
+        "hc02",
+        "hu04"
+      ],
+      "millisecondsForBatch": 0.41845799999999755,
+      "rows": [
+        {
+          "id": "hs01",
+          "label": "simple",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hs02",
+          "label": "simple",
+          "prediction": "simple"
+        },
+        {
+          "id": "hs03",
+          "label": "simple",
+          "prediction": "simple"
+        },
+        {
+          "id": "hs04",
+          "label": "simple",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hs05",
+          "label": "simple",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hc01",
+          "label": "complex",
+          "prediction": "simple"
+        },
+        {
+          "id": "hc02",
+          "label": "complex",
+          "prediction": "simple"
+        },
+        {
+          "id": "hc03",
+          "label": "complex",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hc04",
+          "label": "complex",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hc05",
+          "label": "complex",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hu01",
+          "label": "ambiguous",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hu02",
+          "label": "ambiguous",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hu03",
+          "label": "ambiguous",
+          "prediction": "unknown"
+        },
+        {
+          "id": "hu04",
+          "label": "ambiguous",
+          "prediction": "simple"
+        },
+        {
+          "id": "hu05",
+          "label": "ambiguous",
+          "prediction": "unknown"
+        }
+      ]
+    }
+  }
+}

@@ -1,8 +1,8 @@
 # ADR 0001: use a turn-local plugin boundary
 
-- Status: accepted for the v1 adapter; [ADR 0002](0002-opencode-v2-desktop.md) defines the primary v2 desktop target. Automatic release requires the remaining tests.
+- Status: historical, v1 out of scope; [ADR 0002](0002-opencode-v2-desktop.md) defines the primary v2 desktop target. Automatic release requires the remaining tests.
 - Date: 27 October 2026.
-- Governs: [PRD](../prd-v0.1.md) and [specifications](../specs/README.md).
+- Superseded by: [ADR 0002](0002-opencode-v2-desktop.md). The decisions below are historical and do not govern the current PRD or specifications.
 
 ## Decision
 
@@ -20,7 +20,7 @@ Catalog evidence means host-connected/selectable according to available inventor
 
 ## Evidence and limits
 
-The [host report](../host-feasibility-v1.19.4.md) and [synthetic probe output](../evidence/host-1.19.4.json) document actual local-provider dispatch, variant lowering, catalog access and per-turn scope. This validates the basic mechanism, not live ChatGPT access, UI intent, policy quality, cancellation, concurrency or other-plugin composition. These remain integration/release tests.
+The [host report](../history/host-feasibility-v1.19.4.md) and [synthetic probe output](../evidence/host-1.19.4.json) document actual local-provider dispatch, variant lowering, catalog access and per-turn scope. This validates the basic mechanism, not live ChatGPT access, UI intent, policy quality, cancellation, concurrency or other-plugin composition. These remain integration/release tests.
 
 ## Product tradeoffs
 

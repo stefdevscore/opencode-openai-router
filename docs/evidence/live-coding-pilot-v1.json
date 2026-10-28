@@ -1,0 +1,37 @@
+{
+  "scope": "two synthetic pure-function tasks; not a routing or agent evaluation",
+  "attempts": [
+    {
+      "task": "normalize-tag",
+      "modelRole": "first",
+      "status": "passed",
+      "checksPassed": 4,
+      "checksTotal": 4,
+      "elapsedSeconds": 5.66
+    },
+    {
+      "task": "normalize-tag",
+      "modelRole": "second",
+      "status": "passed",
+      "checksPassed": 4,
+      "checksTotal": 4,
+      "elapsedSeconds": 3.73
+    },
+    {
+      "task": "merge-intervals",
+      "modelRole": "first",
+      "status": "passed",
+      "checksPassed": 4,
+      "checksTotal": 4,
+      "elapsedSeconds": 4.49
+    },
+    {
+      "task": "merge-intervals",
+      "modelRole": "second",
+      "status": "passed",
+      "checksPassed": 4,
+      "checksTotal": 4,
+      "elapsedSeconds": 4.11
+    }
+  ]
+}

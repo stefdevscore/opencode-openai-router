@@ -3,7 +3,7 @@
 - Date: 27 October 2026.
 - Verdict: historical keyword policy rejected for automatic routing.
 
-The former keyword rules were exercised against 12 synthetic examples with a standalone transcription. This is an exploratory counterexample exercise, not the frozen 30-task evaluation, a representative sample, or a measure of model quality. Expected labels below are reviewer judgments, not objective ground truth. The [current routing spec](specs/routing.md) requires a replacement assessment design and evaluated recommendations before automatic release.
+The former keyword rules were exercised against 12 synthetic examples with a standalone transcription. This is an exploratory counterexample exercise, not the frozen 30-task evaluation, a representative sample, or a measure of model quality. Expected labels below are reviewer judgments, not objective ground truth. The [current routing spec](../specs/routing.md) requires a replacement assessment design and evaluated recommendations before automatic release.
 
 The rejected rules matched normalized ASCII token sequences: straightforward triggers included `rename`, `typo`, `format`, `spelling`, `explain this` and `summarize this`; complex triggers included `architecture`, `security audit`, `root cause`, `multi file`, `cross service` and `migration plan`. Both classes or neither meant unknown, and a quote/negation guard abstained. That guard did not address unrelated or multi-step uses of a simple token. The rules are recorded here solely to explain the counterexamples; they are not production implementation instructions.
 

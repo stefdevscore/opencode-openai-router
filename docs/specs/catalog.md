@@ -1,16 +1,18 @@
 # Catalog normalization
 
+Status: planned v0.1 contract. Existing research and scaffold utilities do not establish full acceptance.
+
 ## Source and schema
 
-Read OpenCode's provider inventory through its SDK (`client.provider.list` where supported by the pinned contract). The isolated host exposed configured models, variants and `connected` provider IDs through `/provider`. Use only provider ID `openai` under the host's normal connection/configuration. Compatible endpoints in research are fixtures; generic providers are not production candidates.
+Read v2 model inventory using `ctx.model.list()` and determine provider availability through the pinned v2 provider contract. The local v2 fixture confirms model listing, but does not establish real OpenAI entitlement or the exact connection-status semantics; verify these against the pinned host. Use only provider ID `openai` under the host's normal connection/configuration. Compatible endpoints in research are fixtures; generic providers are not production candidates.
 
-Normalize exact provider/model IDs, connected status, tool/input capabilities, effective host limits, full variant option objects and retrieval time/config generation. Keep unknown fields explicit. Preserve model disabled state if exposed and distinguish complete versus incomplete/error responses. Do not persist credentials or inspect auth files. `connected` and catalog membership mean host-selectable, not proof of remote quota, account entitlement or subscription allowance.
+Normalize exact provider/model IDs, connected status, tool/input capabilities, effective host limits, the bounded variant facts needed to validate semantics and retrieval time/config generation. Keep unknown fields explicit. Preserve model disabled state if exposed and distinguish complete versus incomplete/error responses. Do not persist credentials or inspect auth files. Host-reported availability and catalog membership do not prove remote quota, account entitlement or subscription allowance.
 
 ## Freshness and selection
 
 Refresh on initialization, relevant observed config/provider changes and before a selection if the snapshot is older than 60 seconds. Use one in-flight refresh per plugin instance; wait only within the turn budget and discard late results for that turn. Errors must not replace a valid snapshot with an apparently complete empty list. A stale or disconnected snapshot cannot authorize a new model/variant choice. Read-only inspection can show stale status.
 
-Validate the proposed pair against the newest snapshot available immediately before synchronous draft mutation. There is no transaction with a remote account; provider-side changes after validation are normal host errors. Do not probe credentials, quotas or make a test inference during discovery. Added models become visible on refresh without a release; unranked models do not receive quality roles automatically.
+Validate the proposed pair against the newest snapshot available at the verified v2 application boundary. There is no transaction with a remote account; provider-side changes after validation are normal host errors. Do not probe credentials, quotas or make a test inference during discovery. Added models become visible on refresh without a release; unranked models do not receive quality roles automatically.
 
 Preserve full custom variant settings: a variant can change more than reasoning effort. Known `reasoningEffort` settings or explicit user mappings establish semantics; a label alone does not. Never carry a variant to another model just because its name matches. A variant with additional unrelated settings is not selected automatically unless explicitly mapped by the user.
 

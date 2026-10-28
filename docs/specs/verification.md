@@ -1,13 +1,28 @@
 # Verification and release
 
-## Evidence layers
+Status: planned v0.1 contract. Existing research and scaffold utilities do not establish full acceptance.
 
-1. Unit/fixture: normalized catalog, config validation, reason ordering, policy decisions, unknowns, variants and context constraints.
-2. Pinned-host integration: original message identity, real local-provider model and effort lowering, explicit input preservation, agent pins, sequential turns, tool loops, cancellation, late promises, concurrent sessions and later-plugin changes.
-3. Quality: frozen live paired task corpus before automatic policy release. Synthetic dispatch alone cannot establish coding quality or real ChatGPT auth.
-4. Packaging/release: clean build, typecheck, tests/audit, archive contents, installation/removal and rollback, source/artifact binding and approval.
+## Evidence layers and order
 
-The [probe](../../scripts/probe-host.mjs) and [evidence](../evidence/host-1.19.4.json) establish the basic 1.19.4 mechanism with a local fixture. Its synthetic marker-based decisions are not the production assessment policy; its minimal explicit-input guard still needs the full adapter acceptance matrix. Run it manually with a pinned binary; it must not use provider credentials or user config. Ordinary CI runs unit/fixture checks; an optional integration job may install the pinned host and run the local probe after its OS is tested. No claim about TUI, desktop, auth or quality follows from that v1 probe. The separate [v2 report](../host-feasibility-v2.1.4.md) records its local fixture and limited live connectivity smoke; neither validates automatic routing or quality.
+1. **Credential-free unit tests:** catalog normalization and freshness, config and control precedence, deterministic recommendations, abstention, context/variant constraints, privacy and failure paths. Freeze independent policy fixtures; do not test only implementation-shaped snapshots.
+2. **Pinned v2 server and package tests:** use the actual packaged plugin, OpenCode 2.1.4 and an isolated scripted local provider. The [current probe](../../scripts/probe-v2.mjs) checks a fixture wrapper and is a starting point, not package or routing acceptance. Isolate XDG configuration, credentials and provider endpoints; assert isolation before execution. Keep this separate from ordinary CI until a reproducible runner is configured.
+3. **Pinned desktop tests:** exercise the actual desktop picker with a disposable profile/configuration and local provider. Record the version, installation/configuration method, event evidence and actual dispatched model/effort; restore temporary state. Never alter the user's working global configuration. A CLI fixture cannot satisfy desktop selection tests. If isolation cannot be achieved, mark the desktop gate incomplete rather than using the user's active sessions.
+4. **Live compatibility and quality:** a connection smoke test establishes only that the account can respond. Test a packaged candidate using authorized synthetic tasks after the local host gates; the frozen paired coding evaluation below establishes policy evidence. Do not record credentials, raw private sessions or account identifiers.
+5. **Release:** clean build, audit, package contents, installed archive, uninstall/rollback, source/artifact binding, evidence and approval.
+
+## Host scenario matrix
+
+| Scenario | Evidence required | Expected outcome |
+| --- | --- | --- |
+| No explicit selection | Local provider receives separate model-change and effort-only test decisions. | Each occurs only on a verified eligible turn; actual request matches the proposal. |
+| Desktop manual model and effort selection | UI selection and provider request captured in auto, recommend, off and pinned modes. | Auto may supersede the selection; off, recommend and router pin issue no switch. |
+| Agent pin and router session pin | Configured pin and actual dispatch; pin/unpin and lifetime across reload. | Pins take precedence and persist only for their documented lifetime. |
+| Consecutive turns and control changes during pending work | Compare UI selection and provider dispatch on both turns; disable before and after switch issuance. | Session switch can persist; no stale new switch after an effective disable, no promised rollback of issued work. |
+| Primary, title, compaction, generate and tool continuation | Distinguish calls using host evidence and synthetic provider requests. | Issue switches only for verified eligible admissions, not auxiliary callbacks. Document their session-wide effect on later host calls; no extra user turn and no confusion between tool loops and retries. |
+| Timeout, cancellation, stale catalog, disconnect and host errors | Controlled faults before and after admission, including late promise settlement. | Keep when safely possible; no plugin retry, replay or late mutation. Report unknown when dispatch cannot be established. |
+| Concurrent sessions, multiple plugins, reload and unload | Interleaved decisions, ordered registrations, disposal and subsequent calls. | Isolation, no stale hooks or cross-session leakage; observed conflicts are not misreported as success. |
+
+The local desktop fixture demonstrated that `switchModel` changes session state and persists. That behavior is accepted for auto mode; activation still requires the complete concurrency, control and policy tests. An unsafe or unobservable application condition keeps the host selection. The desktop [host specification](host.md) governs the investigation. The v1 probe is retained as historical evidence only.
 
 ## Performance and quality gates
 

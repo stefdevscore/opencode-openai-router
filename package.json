@@ -7,7 +7,8 @@
   "files": [
     "dist",
     "docs",
-    "scripts"
+    "scripts",
+    "research"
   ],
   "scripts": {
     "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsc",

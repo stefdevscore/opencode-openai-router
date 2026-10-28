@@ -1,31 +1,50 @@
-# Adversarial review and synthesis
+# Final synthesis and development readiness
 
-- Date: 27 October 2026.
-- Scope: source, dependencies, tests, packaging, CI/release, PRD and every domain spec.
-- Disposition: ready for staged development; automatic release is not yet ready.
+- Date: 28 October 2026.
+- Scope: current source and tests, PRD, all domain specs, research evidence, package contents and CI/release configuration.
+- Decision: **ready to begin staged v2 development**. Automatic activation and publication remain gated. The plugin remains inert; development readiness does not certify a production router.
 
-## Findings addressed
+## Accepted product contract
 
-| Priority | Finding | Resolution |
+[ADR 0002](decisions/0002-opencode-v2-desktop.md) governs: OpenCode desktop 2.1.4 is the initial target; auto mode may replace a manual model/variant choice, update the picker and leave that pair selected on later turns. Users disable routing for manual control. Disabling prevents new switches after it is effective and does not restore an old selection or promise to cancel an already-issued switch. Explicit router pins and protected configured agent models remain separate controls. v1 is historical and outside product scope.
+
+This removes the earlier requirement to infer manual picker intent and restore the previous pair after each turn. The desktop fixture demonstrated basic native session switching and persistence, which now match the chosen direction. Unknown session activity, failed controls and stale results still require abstention; the user clarification does not authorize uncontrolled switching during active work.
+
+## Findings resolved in this synthesis
+
+| Finding | Resolution |
+| --- | --- |
+| Architecture abstract and prior synthesis still governed the project with the v1 turn-local design. | Updated both to the accepted v2 session behavior and actual implementation status. Historical reports remain explicitly historical. |
+| Documentation CI required v1 evidence despite the v2-only target. | Check active v2 loader/catalog evidence and parse all evidence JSON; v1 fixture counts no longer govern acceptance. |
+| Packaged documents and research runners referenced omitted research inputs. | Include the synthetic research directory in the private development archive; check its Markdown links as well. Verify links inside the extracted archive and load the compiled inert entry without installed dependencies. |
+| PRD used unknown user intent as a keep reason and could imply that disabling cancels an issued session switch. | Unknown task demand keeps; auto may supersede manual selection. Distinguish late decisions that must not issue switches from issued host operations that may still complete. |
+| Verification required auxiliary calls to remain unaffected even though the accepted model change is session state. | Trigger switches only from eligible admissions and test/document their effects on later primary and auxiliary calls. Do not route title/compaction callbacks independently. |
+
+## What exists and what the evidence establishes
+
+| Area | Present state | Development implication |
 | --- | --- | --- |
-| High | Host-wide transaction, entitlement and crash-journal requirements made the plugin appear impossible without demonstrating the simpler draft boundary. | ADR 0001 replaces them with one awaited turn-local edit, explicit-input preservation, local generation/deadline checks and no replay. A real host/local provider now verifies the core mechanism. |
-| High | Source-only no-go was being treated as a verdict on runtime feasibility. | The pinned runtime probe records actual model/effort dispatch, catalog access and follow-up behavior. The host report distinguishes observed mechanics from remaining tests. |
-| High | Manual intent cannot be inferred from equality of picker values; sticky routing could override a deliberate selection. | Initial scope is noninteractive CLI/server with explicit-input protection and agent pins. TUI/desktop/unknown intent keep; no sticky workaround or virtual model. |
-| High | Catalog discovery was conflated with quality rank and live account entitlement. | Separate host-selectable inventory, reasoning settings, user model roles and unknown remote quota. Effort-only decisions do not require cross-model ranking; unranked models remain visible but unselected. |
-| High | A rejected classifier was still the only detailed policy, giving development contradictory instructions. | Historical rules stay in the assessment record; current spec defines the assessment contract and a concrete recommendation-first milestone. Exact replacement features/thresholds and held-out fixtures are required in its implementation change. |
-| Medium | Cooldown required retaining the router's model across turns even though the hook does not own the session picker. | Cooldown suppresses new proposals without reapplying the prior pair. Host defaults remain authoritative; absent effort follows host behavior. |
-| Medium | Release security grew into an unimplemented custom approval ledger, while the actual workflow was still disabled with a constant condition rejected by actionlint. | Replace unused publishing code with a read-only readiness workflow that explicitly fails on tags/manual runs until a proportionate build-once artifact/digest/environment approval flow is tested. Provenance attestation is recommended hardening, not proof of coding quality. |
-| Medium | Packaging could include stale TypeScript outputs; API types could float beyond the tested host; the TOML check could resolve a different hoisted dependency. | Clean generated output before build, pin the plugin contract, and resolve the compatibility check through the actual plugin dependency graph. |
-| Medium | Documentation lacked a single current implementation sequence and durable checks for broken local links. | PRD → ADR → domain specs → development plan, with a local documentation check in CI. Historical research is labeled as a snapshot. |
+| Package | Inert dual entry, pinned v1/v2 type dependencies, clean TypeScript build, CI on both long-lived branches, publishing-disabled workflow. | Remove the unused v1 surface first; keep the release safeguard. |
+| Pure utilities | Bounded v2 catalog normalization, validated recommendation/off configuration and initial upward-effort recommendation. | Starting points only: config rejects auto, roles do not select models, and the old explicit-selection guard conflicts with the new product behavior. Refactor before integration. |
+| Host evidence | Local CLI and actual desktop fixture changed the session model and retained it on the next turn. Server command registration/options were exercised. | Native switching is a feasible mechanism. Complete disable/pin behavior, session status, deduplication, ordering, lifecycle and actual packaged-plugin tests. |
+| Account facts | Existing OpenAI connection responded; catalog facts and non-sensitive token-field availability were observed. | No auth management is needed. Test real variants and measurement completeness; do not infer entitlement or allowance savings. |
+| Policy | Toy rules fail adversarial examples; 500 external human-time labels provide an independent proxy, not AI-model routing labels. | Define and evaluate a replacement assessment. Do not ship the exploratory rules as the policy. |
+| Live coding | Four static-model attempts on two synthetic pure-function tasks passed their checks. | Pilot only; no router, repository tool use, paired-profile quality result or savings result exists. |
 
-## Remaining implementation/release tests
+The desktop test used a disposable project in the existing app and shared session database. Its test tab/project entry were closed and provider stopped; synthetic sessions remain in history. Local models were absent from picker search, so explicit picker re-selection and variant paths were not exercised. The research report discloses this; it is not full production desktop acceptance.
 
-Core local-provider feasibility is not live account compatibility or policy quality. End-to-end CLI flags, agent pins, cancellation, late promises, tool loops, concurrent sessions, plugin composition, real ChatGPT auth and quality must still be tested in the milestones. These are finite implementation work, not unbounded research prerequisites. No claim is made about unsupported UI surfaces, quota, allowance savings or universal model quality.
+## First implementation changes
 
-## Checks completed in this review
+1. **v2-only baseline:** remove legacy entry, v1 dependency/overrides and unused boundary/normalizer/tests; review whether TOML coverage still applies to the resulting dependency graph. Keep historical evidence. Adapt the existing pure recommendation contract to the accepted behavior. Exit with clean install, audit, tests and a complete extracted package.
+2. **Controls and host contract:** implement one validated user configuration mechanism, deterministic inspect/off/pin controls and instance/session state. Prototype verified session activity, same-session admission serialization and disable-before/after-switch ordering against a local provider. Recommendation mode remains the default. If a host path cannot be proven, keep on that path rather than block unrelated development.
+3. **Recommendation policy:** specify bounded inputs, thresholds and abstention, complete catalog facts and user role mapping, and freeze independent behavioral fixtures. Exercise all profiles without host mutation. Model names and catalog size do not supply quality ranks.
+4. **Native adapter:** wire eligible recommendations to session switching after the contract tests pass; observe model and effort separately, session persistence, controls, active/queued work, duplicate admissions, cancellation, concurrency and other plugins in the actual packaged v2 plugin and desktop.
+5. **Release acceptance:** implement opt-in observations, performance measurement, the frozen 30-task baseline/profile coding evaluation, installed-package checks and rollback, then dry-run the build-once approval workflow before any automatic release.
 
-Clean locked installation, typecheck, both existing tests and dependency audit passed with zero reported vulnerabilities. The audit covers this package's installed dependency graph, not all dependencies embedded in the separately distributed native host. The reproducible 1.19.4 probe passed five local-provider fixtures and recorded sanitized request evidence. A planted stale build file was removed by the new build command. The actual packed archive was extracted and checked for local documentation links, included probe scripts and a dependency-free inert entry point. Both GitHub workflows passed actionlint 1.7.12 with optional shellcheck/pyflakes integrations disabled. CI changes have not yet run remotely, and the probe driver was exercised on Node.js 26/macOS arm64 rather than the configured Node.js 24 CI runtime.
+Exact config transport, safe host activity signals, policy features and observation storage path are explicit implementation deliverables. They are not established facts or prerequisites for beginning the first change. The [domain specs](specs/README.md) and [development plan](development-plan.md) define their acceptance criteria.
 
-## Research basis
+## Verification of the scaffold
 
-Use pinned upstream code and the recorded host probe over issue speculation. [OpenCode prompt lifecycle](https://github.com/anomalyco/opencode/blob/148842ef7cb1bc34192b3fff57d0f9721ab9c801/packages/opencode/src/session/prompt.ts), [hook order](https://github.com/anomalyco/opencode/blob/148842ef7cb1bc34192b3fff57d0f9721ab9c801/packages/opencode/src/plugin/index.ts), and [CLI inputs](https://github.com/anomalyco/opencode/blob/148842ef7cb1bc34192b3fff57d0f9721ab9c801/packages/opencode/src/cli/cmd/run.ts) corroborate the mechanism. Community [classifier-plugin documentation](https://github.com/lucasliet/opencode-classifier-plugin) independently describes output-message routing and the same-model sticky-intent limitation; its external classifier/auth/provider approach is outside our scope. Official [models](https://opencode.ai/docs/models/) and [SDK](https://opencode.ai/docs/sdk/) docs describe configurable metadata, not a quality ranking or account guarantee.
+Fresh locked installation, typecheck, nine existing tests, documentation checks, dependency audit and whitespace checks passed. The audit reported zero vulnerabilities; npm also reported upstream deprecation/install-script notices, which are not a compatibility guarantee or advisory finding. Local default runtime was Node.js 26.12.1. Typecheck, all nine tests and documentation checks also passed on Node.js 24.22.1, matching the CI major version. Existing tests include legacy v1 coverage and must not be presented as v2 routing coverage.
+
+The private development archive includes the referenced research inputs; its extracted documentation links and evidence JSON passed and its inert v2 entry loaded without development dependencies. These are scaffold checks, not release provenance or package routing acceptance. CI configuration targets Node.js 24 and pushes/PRs to both `main` and `development`; the documentation cleanup must pass remote CI when pushed. Release readiness explicitly fails instead of publishing.

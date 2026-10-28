@@ -1,0 +1,7 @@
+# Desktop session-switch research fixture
+
+This is the exact disposable-project fixture used for the 2.1.4 desktop observation, retained for inspection. It is **not a product plugin**. The `desktop-route` prompt deliberately changes the current session model to `local/probe-b`. Do not load it in a real working project or on a live provider.
+
+The fixture was prepared under `/tmp/router-desktop-research`: `provider.mjs` starts a loopback-only compatible provider, writes a project configuration to `project/opencode.json`, and records only synthetic model IDs and reasoning fields. The plugin source and package metadata were placed in `project/probe-plugin/`; the plugin records only the four exact synthetic markers and local-model metadata, and otherwise does nothing. The fixed path in both scripts is intentional for this recorded experiment; they are not safe to run against an existing directory with that name without first checking its contents.
+
+The 2.1.4 CLI seeded a new session with `local/probe-a` in this project. The actual desktop opened that session; three additional synthetic prompts were entered there. The desktop could not find either local model in picker search, so no explicit picker re-selection was performed. The provider process was stopped and the temporary project entry closed after the test. Its synthetic session remains in recent sessions. See the [sanitized evidence](../../docs/evidence/v2-desktop-session-switch-2.1.4.json) and [assessment](../../docs/v2-product-feasibility.md) for limits.

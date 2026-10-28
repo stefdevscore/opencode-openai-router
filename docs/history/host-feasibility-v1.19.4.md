@@ -1,9 +1,11 @@
 # OpenCode 1.19.4: pinned source and runtime findings
 
+**Historical:** v1 is outside the current product scope. This report is retained as prior evidence and does not establish v2 behavior.
+
 - Date: 27 October 2026.
 - Verdict: core turn-local routing mechanism verified against a local provider; production acceptance remains incomplete.
 
-This report supersedes the earlier source-only no-go under the overconstrained transaction proposal. [ADR 0001](decisions/0001-turn-local-routing.md) explains the revised boundary. The plugin itself remains inert; the probe deliberately mutates synthetic fixtures to test host mechanics.
+This report supersedes the earlier source-only no-go under the overconstrained transaction proposal. [ADR 0001](../decisions/0001-turn-local-routing.md) explains the revised boundary. The plugin itself remains inert; the probe deliberately mutates synthetic fixtures to test host mechanics.
 
 ## Reproduction
 
@@ -13,7 +15,7 @@ The harness uses isolated XDG config/data/cache/state directories, a temporary w
 
 ## Runtime observations
 
-The sanitized [JSON output](evidence/host-1.19.4.json) records:
+The sanitized [JSON output](../evidence/host-1.19.4.json) records:
 
 - `/provider` exposed `openai` as connected, both configured model candidates, and `low`/`high` variants. This is configured host inventory, not remote entitlement proof.
 - Editing the pending default `probe-a` pair to `probe-b/high` produced an actual local-provider request for `probe-b` with `reasoning_effort: high`. The temporary plugin preserves explicit prompt selections.
@@ -29,6 +31,6 @@ Upstream tag `v1.19.4` resolved to `148842ef7cb1bc34192b3fff57d0f9721ab9c801`. [
 
 Earlier [v1.15.7 input-mutation issue](https://github.com/anomalyco/opencode/issues/28901) and [active-picker issue](https://github.com/anomalyco/opencode/issues/18644) concern different paths. Input-model mutation is not equivalent to changing the output user-message draft; picker persistence is not the same as a per-turn request. Neither issue alone establishes current feasibility.
 
-## Remaining acceptance
+## Historical gaps at the end of this investigation
 
 Configured agent pins, cancellation, late promises, concurrent sessions, tool-loop behavior, other-plugin ordering, live ChatGPT authentication, real context caps and policy quality still require tests. The hook does not expose a client-surface identifier, so omitted selection fields in a server prompt cannot establish whether a future request came from the noninteractive CLI or a UI. A candidate boundary based on the observed standalone process shape has unit tests, but attached and interactive paths, other launchers and operating systems need integration evidence before automatic routing. TUI/desktop intent is unverified and remains outside automatic support. No atomic quota/catalog/picker transaction is claimed or required for the scoped design. The pure core remains recommendation-only; automatic production release waits for the PRD's remaining evidence.

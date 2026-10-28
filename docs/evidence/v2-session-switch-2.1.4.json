@@ -1,0 +1,78 @@
+{
+  "version": "opencode v2.1.4",
+  "scope": "isolated fixture only; intentionally switches session during prompt admission",
+  "events": [
+    {
+      "type": "setup",
+      "id": "opencode.openai-router"
+    },
+    {
+      "type": "prompt",
+      "keys": [
+        "sessionID",
+        "messageID",
+        "prompt",
+        "metadata",
+        "delivery"
+      ],
+      "promptKeys": [
+        "text",
+        "files",
+        "agents",
+        "skills"
+      ],
+      "matchesFixture": true
+    },
+    {
+      "type": "switch-completed"
+    },
+    {
+      "type": "catalog",
+      "localModels": [
+        "probe-b",
+        "probe-a"
+      ]
+    },
+    {
+      "type": "setup",
+      "id": "opencode.openai-router"
+    },
+    {
+      "type": "prompt",
+      "keys": [
+        "sessionID",
+        "messageID",
+        "prompt",
+        "metadata",
+        "delivery"
+      ],
+      "promptKeys": [
+        "text",
+        "files",
+        "agents",
+        "skills"
+      ],
+      "matchesFixture": false
+    },
+    {
+      "type": "catalog",
+      "localModels": [
+        "probe-b",
+        "probe-a"
+      ]
+    }
+  ],
+  "firstRequests": [
+    {
+      "model": "probe-b"
+    },
+    {
+      "model": "probe-b"
+    }
+  ],
+  "followupRequests": [
+    {
+      "model": "probe-b"
+    }
+  ]
+}

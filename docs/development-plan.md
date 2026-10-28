@@ -1,37 +1,37 @@
 # v0.1 development plan
 
-Status: ready to begin scoped implementation. Production routing and release remain conditional on measured acceptance; this is not a claim that those features exist.
+Status: session-level automatic routing is the accepted product direction and scoped implementation may begin. See the [feasibility assessment](v2-product-feasibility.md). Automatic routing remains disabled until the host boundary, policy and release gates pass. OpenCode desktop 2.1.4 is the pinned initial target; its bundled CLI supports local server tests but does not substitute for desktop tests.
 
-## Milestone 0: baseline and feasibility — initial evidence obtained
+## 0. Retire v1 from the active product
 
-Keep the plugin inert, preserve clean install/typecheck/test/audit/package checks, and reproduce the pinned [host probe](host-feasibility-v1.19.4.md). Basic catalog, model dispatch, effort lowering and follow-up behavior are observed. The [v1 ADR](decisions/0001-turn-local-routing.md) removes the unnecessary global transaction prerequisite for that host. The [v2 desktop decision](decisions/0002-opencode-v2-desktop.md) identifies a separate, unresolved selection boundary. The [review](review-synthesis.md) explains changes from historical drafts.
+Treat the v1 report, ADR, probe and tests as historical reference. Remove the v1 entry, dependency, normalizer, client-boundary code and dedicated tests in a focused implementation change after checking their dependencies; preserve any genuinely shared TOML coverage. Do not delete historical evidence merely to make the tree smaller. v1 compatibility is not an acceptance target and requires a new decision if reinstated.
 
-## Milestone 1: shared contracts, catalog and controls
+## 1. Complete controls and the session-switch contract
 
-Initial pure catalog normalization and configuration validation now exist; the plugin entry point remains inert. Complete `src/catalog/` and `src/config/` with generation-based controls, resolve one user configuration mechanism against the pinned loader, and use recommendation mode without changing coding requests. Define agent-pin detection, role/effort mappings and catalog refresh/deduplication. Keep raw prompts and credentials out of storage.
+The basic session switch and persistence have been observed in CLI and desktop fixtures. Complete the contract tests in the [host specification](specs/host.md) using the actual packaged plugin and a local provider. Implement the off/pin/inspection controls needed to test application ordering. Verify turn identity, protected agent pins, disable ordering, safe session state and subsequent-turn behavior for session-level switches. Manual picker choices may be overridden in auto mode. Unknown host state blocks that application, not pure-module or recommendation work.
 
-Exit: fixtures cover complete/partial catalogs, disconnected OpenAI, custom variant settings, invalid configuration, unknown context, explicit input selection and configured agent pin. Inspection is possible without model inference. Config precedence/path and session-pin lifetime are documented. Pure contracts contain no SDK or filesystem dependencies.
+Exit: a reproducible evidence report and contract test matrix with actual provider dispatch, desktop picker and subsequent-turn evidence. CLI evidence is not desktop evidence.
 
-## Milestone 2: evaluated recommendation policy
+## 2. Complete catalog, controls and recommendation mode
 
-An initial pure effort recommender accepts a caller-supplied task assessment and can only propose an upward effort change; it does not assess prompts or run from the plugin. Create a versioned assessment design and complete `src/routing/`: unknown demand keeps, recognized complex/high-impact work may recommend a higher supported effort, and a simplistic token must not trigger a downshift. Add optional role-based model recommendations only with explicit user preference and compatible context. Do not revive the rejected keyword classifier. Define bounded features, task-context inputs, confidence/abstention, threshold values and fixture outputs in the policy change before merging it.
+Use the native v2 model/provider APIs and verified user configuration mechanism. Complete pure validation, freshness, preference mapping and decision reasons; keep unknown values explicit. Resolve native status/inspection and user controls without a model call. Recommendations do not mutate requests. Remove the unused v1 surface in this phase if not already done.
 
-Exit: a held-out fixture set includes the historical counterexamples, mixed requests, code/quotes, ordinary bugs, long inputs, attachments and explicit selections. Each profile produces meaningful explainable differences where evidence supports them, and abstains elsewhere. Policy fixtures are behavioral tests with independently labeled examples, not implementation snapshots. Frozen live evaluation is prepared separately; no fabricated quality/savings claim.
+Exit: deterministic fixtures cover incomplete/disconnected/stale catalogs, variant semantics, unknown context, invalid controls and all override states. Load the actual packaged plugin in the pinned v2 host, exercise inspect and disposal, and verify no provider requests or observation writes are caused by inspection.
 
-## Milestone 3: narrow adapter and real-host suite
+## 3. Develop and evaluate the policy
 
-Implement `src/host/` and wire the thin `src/index.ts` entry only after each host-specific boundary is verified. On v1, complete async work inside the budget, recheck generation and synchronously edit the pending pair once. For v2, first establish whether native APIs can preserve turn-local and manual-selection semantics. Preserve explicit model/variant inputs and agent pins. Default to recommendations until acceptance and quality evidence justify auto mode.
+Design a bounded, versioned assessment with predeclared inputs, thresholds, confidence and abstention. Reject the old keyword-only classifier; never infer quality ranks from model IDs. Implement role-based model proposals only with explicit preference and validated context, and effort choices only with known variant semantics. Freeze independently labeled policy fixtures before tuning and hold out counterexamples. A proposed result is not an applied result.
 
-Exit: actual pinned CLI flag tests, scripted-provider model/variant tests, original-message identity, tool loops, cancellation/late promise, config change during await, independent sessions, reload/pin lifetime and later-plugin conflict tests pass. Establish a tested supported-client boundary or an explicitly scoped user opt-in; the hook's omitted selection fields alone do not identify the client. Observed versus proposed results are distinct. Unsupported or unknown client intent retains the draft. No extra user turn, background mutation, credential read or alternate-model retry.
+Exit: profile-specific, nontrivial behavioral fixtures and abstention cases pass, including negation, quoted/code text, mixed requests, long context, disable/pin precedence and unknown data. Prepare the frozen live evaluation before running it.
 
-## Milestone 4: optional observations and live evaluation
+## 4. Implement the proven adapter and local integration tests
 
-Implement `src/observation/` after control and decision contracts stabilize. Test allowlisted fields, aliases, consent off, byte/count/age bounds, deletion and storage failures. Run the PRD's paired live quality suite only with explicitly authorized synthetic test access. Measure added latency with a local fixture and actual quality separately. Any policy changes after a failed evaluation require the full frozen suite again.
+After the relevant milestone 1 contract tests pass, wire the pure engine to the tested v2 boundary. Default to recommendation mode during development. Test actual provider model and effort, manual choices in auto and disabled modes, agent pins, subsequent turns, primary versus auxiliary requests, tool loops, plugin ordering, deadline and late promises, cancellation, concurrency and lifecycle. Validate the packaged plugin, not only a fixture wrapper. Unknown evidence keeps the host choice.
 
-Exit: measured performance and paired outcomes meet the PRD, with missing data and sample limitations disclosed. Real ChatGPT compatibility is verified before claiming it. No token-to-allowance inference.
+Exit: the complete [host matrix](specs/host.md) passes in the pinned server and representative desktop paths; no production mutation is enabled on an untested path.
 
-## Milestone 5: package and release
+## 5. Measurements and release
 
-Finalize install/disable/remove and rollback instructions; update the development version only when acceptance is met. Implement build-once protected-main candidate artifacts, package/source digests, required environment approval and publish-the-tested-bytes. Keep the release job disabled until its non-production dry-run passes. Attestations are recommended hardening; a custom distributed approval system is out of scope.
+Implement optional local observations only after the contracts stabilize; consent defaults off. Run privacy and storage tests, at least 100 paired warmed performance trials, and the PRD's frozen 30-task paired live quality evaluation with a suitable authorized account and budget. A connectivity smoke test is not a quality evaluation. No savings claim follows from token counts.
 
-Exit: clean archive installation, no stale/generated/private files, all gates on the exact candidate, correct tag/SHA and artifact digest, approval, rollback and public limitations documented. Desktop v2 requires its own completed boundary and acceptance evidence; autonomous unranked-model ranking requires a later decision.
+Exit: all [verification gates](specs/verification.md) pass, the installed package and rollback are checked, and a protected build-once release workflow is dry-run. Keep publication disabled until then. Any missing desktop, policy, live or performance evidence keeps automatic release blocked.

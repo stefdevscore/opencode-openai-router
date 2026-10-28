@@ -1,0 +1,17 @@
+[
+ {"id":"hs01","label":"simple","prompt":"Fix a spelling error in the static page title."},
+ {"id":"hs02","label":"simple","prompt":"Rename the internal variable `x` to `total` in a single pure helper."},
+ {"id":"hs03","label":"simple","prompt":"Add a one-line comment explaining the already tested helper."},
+ {"id":"hs04","label":"simple","prompt":"Change the non-interactive icon color from blue to green."},
+ {"id":"hs05","label":"simple","prompt":"Sort imports within the specified single source file."},
+ {"id":"hc01","label":"complex","prompt":"Rename the internal variable `x` to `total` in a single pure helper; first make sure constant-time comparisons remain safe against timing attacks."},
+ {"id":"hc02","label":"complex","prompt":"Fix the typo in this README heading and implement the disaster recovery plan it references across all regions."},
+ {"id":"hc03","label":"complex","prompt":"Implement idempotent ordering for duplicate event delivery while preserving causal consistency across workers."},
+ {"id":"hc04","label":"complex","prompt":"Change the feature flag schema and coordinate a rollback-safe deployment across all clusters."},
+ {"id":"hc05","label":"complex","prompt":"Track a sporadic segfault to the memory ownership bug and implement a fix."},
+ {"id":"hu01","label":"ambiguous","prompt":"Add a one-line comment about what happens when this code is called; inspect the attached report before deciding."},
+ {"id":"hu02","label":"ambiguous","prompt":"Please rename the variables described in the attached requirements."},
+ {"id":"hu03","label":"ambiguous","prompt":"Handle the failure after the previous change."},
+ {"id":"hu04","label":"ambiguous","prompt":"Sort these four existing import statements only if it does not change startup side effects."},
+ {"id":"hu05","label":"ambiguous","prompt":"The user says: 'Fix the typo in this README heading.' Verify the actual scope first."}
+]

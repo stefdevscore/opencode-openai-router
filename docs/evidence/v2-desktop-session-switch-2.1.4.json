@@ -1,0 +1,93 @@
+{
+  "host": "OpenCode desktop 2.1.4",
+  "scope": "temporary project and loopback provider; desktop session was seeded by CLI; no user credentials used",
+  "fixtureNote": "marker desktop-explicit-a labels a normal desktop send; picker reselection could not be performed because the local models were not listed",
+  "events": [
+    {
+      "type": "prompt",
+      "marker": "desktop-default",
+      "metadataKeys": [],
+      "selection": null
+    },
+    {
+      "type": "prompt",
+      "marker": "desktop-explicit-a",
+      "metadataKeys": [
+        "agent",
+        "attachments",
+        "comments",
+        "displayText",
+        "model"
+      ],
+      "selection": {
+        "providerID": "local",
+        "modelID": "probe-a",
+        "variant": null
+      }
+    },
+    {
+      "type": "prompt",
+      "marker": "desktop-route",
+      "metadataKeys": [
+        "agent",
+        "attachments",
+        "comments",
+        "displayText",
+        "model"
+      ],
+      "selection": {
+        "providerID": "local",
+        "modelID": "probe-a",
+        "variant": null
+      }
+    },
+    {
+      "type": "session-switch",
+      "to": "probe-b"
+    },
+    {
+      "type": "prompt",
+      "marker": "desktop-followup",
+      "metadataKeys": [
+        "agent",
+        "attachments",
+        "comments",
+        "displayText",
+        "model"
+      ],
+      "selection": {
+        "providerID": "local",
+        "modelID": "probe-b",
+        "variant": null
+      }
+    }
+  ],
+  "providerRequests": [
+    {
+      "model": "probe-a",
+      "reasoningEffort": null
+    },
+    {
+      "model": "probe-a",
+      "reasoningEffort": null
+    },
+    {
+      "model": "probe-b",
+      "reasoningEffort": null
+    },
+    {
+      "model": "probe-b",
+      "reasoningEffort": null
+    }
+  ],
+  "desktopObservations": [
+    "initial composer showed Router Probe A",
+    "fixture switch surfaced as Switched to Router Probe B",
+    "composer displayed Router Probe B after switch",
+    "following turn displayed Router Probe B"
+  ],
+  "limits": [
+    "local models were absent from the picker search despite CLI visibility",
+    "explicit same-value selection, variant selection and queued or concurrent prompts not tested"
+  ]
+}
