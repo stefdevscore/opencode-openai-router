@@ -45,7 +45,7 @@ The desktop test used a disposable project in the existing app and shared sessio
 4. Implement bounded local task assessment and evidence-based profile selection, then exercise real automatic switches. No user-assigned roles, manual model pins or per-task classifier calls are required.
 5. Complete opt-in observations, cold/warm overhead measurements, held-out classifier tests and the frozen paired coding corpus, then package/rollback and release dry-run.
 
-The [development plan](development-plan.md) gives delivery dependencies. Config transport, reliable host activity, evidence-source coverage, classifier transport/bootstrap, enforceable budget units, policy thresholds and storage path are implementation deliverables. They are not established facts. A missing source or classifier limits ranking coverage and triggers keep behavior; it does not authorize invented quality claims or block unrelated implementation.
+The [development plan](development-plan.md) gives delivery dependencies. Config transport, reliable host activity, evidence-source coverage, classifier transport/bootstrap, enforceable budget units, policy thresholds and storage path are implementation deliverables. They are not established facts. The user subsequently requested optimistic automatic recovery: missing sources or classifiers trigger retries and may lead to clearly labeled provisional estimates, not fabricated benchmark claims. Host safety and actual connectivity remain independent constraints.
 
 ## Additional conflicts resolved
 

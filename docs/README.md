@@ -4,7 +4,7 @@ Updated 28 October 2026. This is the current v2-only development baseline.
 
 ## Accepted behavior
 
-Automatic mode may change a manually selected model or reasoning variant through OpenCode's native session controls. The picker can change and the selection can persist to later turns. Users disable routing for manual control; disabling stops new router switches after it is effective and does not restore prior selections or cancel an already-issued host operation. There is no recommendation-only mode or manual model pin. Optional model classification runs only in the background on changed model/evidence information and requires explicit enablement and an allowance budget. User controls are under development; automatic routing is not yet active.
+Automatic mode may change a manually selected model or reasoning variant through OpenCode's native session controls. The picker can change and the selection can persist to later turns. Users disable routing for manual control; disabling stops new router switches after it is effective and does not restore prior selections or cancel an already-issued host operation. There is no recommendation-only mode or manual model pin. Background classification is intended only for newly discovered models that need inference, with disclosed rolling dispatch limits and no per-task or periodic reclassification. Exact allowance accounting remains unverified. User controls are under development; automatic routing is not yet active.
 
 ## Reading order and authority
 
@@ -18,6 +18,8 @@ Automatic mode may change a manually selected model or reasoning variant through
 | [Review synthesis](review-synthesis.md) | Current readiness decision and known implementation gaps. |
 | [Feasibility assessment](v2-product-feasibility.md) | Observed results and their limits. |
 | [Initial host probe](host-feasibility-v2.1.4.md) | Narrow v2 loader/catalog evidence. |
+| [Cut 5 research](cut5-research.md) | Evidence sources, comparison and extractor anchors, transport limits, and staged QA. |
+| [Cut 5 implementation plan](cut5-implementation-plan.md) | Remaining implementation, usage notices, verification and review checkpoints. |
 | [Evidence guide](evidence/README.md) | Recorded results, reproducible research and live-test scope. |
 | [Historical material](history/README.md) | Superseded proposals and v1 evidence. |
 
