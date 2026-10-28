@@ -8,13 +8,13 @@
 
 Choose an appropriate available OpenAI model and supported reasoning variant for a coding turn inside OpenCode, with minimal overhead and explicit user control. Preserve OpenCode's conversations, authentication, engine, permissions and normal request lifecycle. Successful completion matters more than reducing a single request's token count.
 
-The plugin is currently inert. A development package version does not establish product readiness. A session-level v2 switch has been demonstrated in a local desktop fixture; the adapter and safety gates remain unfinished. Development targets automatic switching directly, exercised first with local fixtures.
+The plugin currently implements controls and desktop status but does not route requests. A development package version does not establish product readiness. A session-level v2 switch has been demonstrated in a local desktop fixture; the adapter and safety gates remain unfinished. Development targets automatic switching directly, exercised first with local fixtures.
 
 ## 2. Users and scope
 
 The primary user has an existing OpenCode OpenAI connection, including ChatGPT sign-in where supported by the host. They want automatic effort/model choices, explanations, Economy/Balanced/Quality profiles and an effective disable control for manual selection.
 
-The primary target is OpenCode desktop 2.1.4 with its native v2 plugin API. The native session switch is the chosen candidate; full automatic desktop compatibility is not yet established. OpenCode v1 is outside v0.1 scope. TUI, interactive CLI, other host versions and providers are not implicitly supported. Manual selection intent need not be inferred in auto mode. A local scripted provider validates host mechanics, not real account access.
+The development target is OpenCode desktop 2.2.0 with its native v2 plugin API, including its experimental GUI surface for status. Earlier native session-switch evidence is from 2.1.4 and must be reproduced on 2.2.0; full automatic desktop compatibility is not yet established. OpenCode v1 is outside v0.1 scope. TUI, interactive CLI, other host versions and providers are not implicitly supported. Manual selection intent need not be inferred in auto mode. A local scripted provider validates host mechanics, not real account access.
 
 Discover candidates and variants dynamically. On new or changed models, perform a background lookup for structured evidence from reliable sources as defined in [model evidence](specs/model-evidence.md), without requiring user-assigned roles. Optional low-frequency classification can interpret retrieved evidence under an explicitly enabled allowance budget; it does not run on coding prompts. Combine only comparable, correctly identified evidence to make provisional profile choices. Missing or ambiguous evidence keeps a valid host selection while lookup retries; do not invent a rank. Optional local calibration may use the connected account only with explicit user consent and a disclosed allowance budget.
 

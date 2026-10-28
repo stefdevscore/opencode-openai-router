@@ -13,16 +13,17 @@ test("packed plugin includes and loads the local and package entries", async () 
   try {
     const [archive] = JSON.parse(execFileSync("npm", ["pack", "--ignore-scripts", "--json", "--pack-destination", temp], { encoding: "utf8" }));
     const paths = new Set(archive.files.map(file => file.path));
-    for (const entry of ["package.json", "server.js", "dist/index.js"]) assert.ok(paths.has(entry), `package missing ${entry}`);
+    for (const entry of ["package.json", "server.js", "dist/index.js", "dist/gui-experimental.cjs"]) assert.ok(paths.has(entry), `package missing ${entry}`);
     execFileSync("tar", ["-xzf", path.join(temp, archive.filename), "-C", temp]);
     const root = path.join(temp, "package");
     const metadata = JSON.parse(await readFile(path.join(root, "package.json"), "utf8"));
-    assert.equal(metadata.exports, "./dist/index.js");
+    assert.equal(metadata.exports["."], "./dist/index.js");
+    assert.equal(metadata.exports["./gui-experimental"], "./dist/gui-experimental.cjs");
     const local = await import(pathToFileURL(path.join(root, "server.js")).href);
-    const exported = await import(pathToFileURL(path.join(root, metadata.exports)).href);
+    const exported = await import(pathToFileURL(path.join(root, metadata.exports["."])).href);
     assert.equal(local.default, exported.default);
-    assert.equal(local.default.id, "opencode.openai-router");
-    const cleanup = await local.default.setup({ command: { transform: async callback => { callback({ add: () => {} }); return { dispose: async () => {} }; } } });
+    assert.equal(local.default.id, "openai-router");
+    const cleanup = await local.default.setup({ rpc: { register: async () => ({ dispose: async () => {} }) } });
     assert.equal(typeof cleanup, "function");
     await cleanup();
   } finally {

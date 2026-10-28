@@ -4,11 +4,11 @@ An OpenCode v2 plugin in development for selecting an available OpenAI model and
 
 ## Status and intended behavior
 
-The package is a development scaffold. User configuration and a server-side status command are implemented, but no automatic routing or observation collection runs from the plugin.
+The package is a development scaffold. User configuration and an experimental OpenCode 2.2 desktop status action are implemented, but no automatic routing or observation collection runs from the plugin.
 
 The accepted design uses native session switching. With automatic routing enabled, the plugin may replace a manual model or variant choice, update the picker and leave that selection in place for later turns. Disable routing for manual control; disabling will not restore an earlier selection or reverse a switch already issued. The planned profiles are Economy, Balanced and Quality, with optional local observations. There is no recommendation-only mode.
 
-The initial target is OpenCode desktop **2.1.4**. Basic session switching has been observed in a desktop/local-provider fixture. Safe admission ordering, effective controls, policy quality and production compatibility remain implementation and release work. Catalog discovery does not establish model quality, account entitlement or subscription allowance savings. Planned background evidence lookup and optional budgeted model classification supply provisional capability assessments; coding-task assessment stays local and users do not assign model roles.
+Basic session switching was observed in a desktop/local-provider fixture on OpenCode **2.1.4**. Desktop status is now being developed against **2.2.0**, which has an experimental GUI API; the switching adapter has not been validated on that version. Safe admission ordering, effective controls, policy quality and production compatibility remain implementation and release work. Catalog discovery does not establish model quality, account entitlement or subscription allowance savings. Planned background evidence lookup and optional budgeted model classification supply provisional capability assessments; coding-task assessment stays local and users do not assign model roles.
 
 ## Documentation
 
@@ -27,7 +27,7 @@ npm run check:docs
 npm test
 ```
 
-The compiled entry is `dist/index.js`; `server.js` exposes it to the 2.1.4 local-directory loader. No routing hook is registered yet. See the [v2 plugin documentation](https://opencode.ai/v2/docs/build/plugins/) for host loading; validate APIs against the pinned SDK and binary because current online documentation may describe a newer contract.
+The compiled server entry is `dist/index.js`; `server.js` exposes it to the local-directory loader. The build also creates the 2.2 GUI bundle. No routing hook is registered yet. See the [v2 plugin documentation](https://opencode.ai/v2/docs/build/plugins/) for host loading; validate APIs against the pinned SDK and binary because current online documentation may describe a newer contract.
 
 ## Controls under development
 
@@ -37,17 +37,15 @@ For the pinned macOS target, settings are read from `$XDG_CONFIG_HOME/opencode-o
 { "mode": "off", "profile": "balanced" }
 ```
 
-`mode` accepts `auto` or `off`; `profile` accepts `economy`, `balanced` or `quality`. Unknown fields and invalid values are rejected. The plugin does not create or rewrite this file and ignores project plugin options. In this cut neither mode switches models. The registered `openai-router-status` server command refreshes the file and emits bounded JSON to the server log. Isolated host API tests verified the command without a coding prompt or provider request. The desktop discovers the command, but does not display its result; desktop inspection remains incomplete. See the [controls specification](docs/specs/controls.md) for reload and failure behavior.
+`mode` accepts `auto` or `off`; `profile` accepts `economy`, `balanced` or `quality`. Unknown fields and invalid values are rejected. The plugin does not create or rewrite this file and ignores project plugin options. In this cut neither mode switches models. In a session on OpenCode 2.2, open the command palette with `Cmd+P` and select **OpenAI router: Show status**. The action reads current controls and displays them in a native dialog. It is intentionally not a slash command: the host can apply the composer's model or agent when running one. See the [controls specification](docs/specs/controls.md) for reload and failure behavior.
 
 After building, an optional credential-free probe can exercise a pinned host with a local provider:
 
 ```sh
-npm run probe:v2 -- /absolute/path/to/opencode-2.1.4
-node scripts/probe-v2-package.mjs /absolute/path/to/opencode-2.1.4
-node scripts/probe-v2-inspection.mjs /absolute/path/to/opencode-2.1.4
+node scripts/probe-v2-gui-rpc.mjs /absolute/path/to/opencode-2.2.0
 ```
 
-The probe uses temporary directories and local provider fixtures. It has been exercised on macOS arm64 and is separate from ordinary CI. Run it without externally managed plugins or providers. Research scripts have different scopes, including explicitly live account tests; consult the [evidence guide](docs/evidence/README.md) before running them.
+The probe uses temporary directories and a local provider fixture. It has been exercised on macOS arm64 and is separate from ordinary CI. Earlier 2.1.4 probes are historical and target the earlier server-command implementation. Research scripts have different scopes, including explicitly live account tests; consult the [evidence guide](docs/evidence/README.md) before running them.
 
 ## CI and releases
 

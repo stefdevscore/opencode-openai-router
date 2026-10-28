@@ -5,7 +5,8 @@
     "The desktop slash-command menu offered openai-router-status with its registered description.",
     "Selecting and sending the command created a session but displayed no status result in the conversation.",
     "A separate synthetic input with resume false appeared as an Updates inbox item, not a direct status response. It is not used for inspection because it can affect later session input.",
-    "The test tab and project were closed. The synthetic session can remain in host history."
+    "A separate experimental fixture displayed off/quality in the desktop slash-command description. After changing the isolated settings to auto/balanced and running the refresh command, reopening the command menu still displayed off/quality. The workaround was not retained.",
+    "The test tabs and projects were closed. The synthetic test sessions can remain in host history."
   ],
-  "conclusion": "Desktop command discovery works, but a usable visible inspection result remains unverified. The separate isolated server probe verifies no provider request or session message for the status command."
+  "conclusion": "Desktop command discovery works, but neither command output nor a reliably refreshed description was observed. The separate isolated server probe verifies no provider request or session message for the status command."
 }

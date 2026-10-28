@@ -6,7 +6,7 @@
 
 ## Accepted product contract
 
-[ADR 0002](decisions/0002-opencode-v2-desktop.md) governs: OpenCode desktop 2.1.4 is the initial target; auto mode may replace a manual model/variant choice, update the picker and leave that pair selected on later turns. Users disable routing for manual control. Disabling prevents new switches after it is effective and does not restore an old selection or promise to cancel an already-issued switch. The user subsequently removed recommendation-only behavior and model pins from the routing contract; auto mode owns selection. v1 is historical and outside product scope.
+[ADR 0002](decisions/0002-opencode-v2-desktop.md) governs: development now targets OpenCode desktop 2.2.0; the earlier switching evidence is from 2.1.4 and needs to be repeated. Auto mode may replace a manual model/variant choice, update the picker and leave that pair selected on later turns. Users disable routing for manual control. Disabling prevents new switches after it is effective and does not restore an old selection or promise to cancel an already-issued switch. The user subsequently removed recommendation-only behavior and model pins from the routing contract; auto mode owns selection. v1 is historical and outside product scope.
 
 This removes the earlier requirement to infer manual picker intent and restore the previous pair after each turn. The desktop fixture demonstrated basic native session switching and persistence, which now match the chosen direction. Unknown session activity, failed controls and stale results still require abstention; the user clarification does not authorize uncontrolled switching during active work.
 

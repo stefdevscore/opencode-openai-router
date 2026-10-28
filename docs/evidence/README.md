@@ -29,6 +29,9 @@ Build the scaffold first. All host probes require the exact version they name; d
 | [Packed v2 probe](../../scripts/probe-v2-package.mjs) | Packs the actual plugin, verifies host loading and exercises control status and reload with isolated user and conflicting project settings. Desktop command visibility and switching remain unverified. |
 | [Inspection probe](../../scripts/probe-v2-inspection.mjs) | Invokes the packed plugin's status command in a fresh isolated host session and checks for zero session messages and provider requests. Does not prove desktop visibility. |
 | [Desktop controls check](v2-desktop-controls-2.1.4.json) | The desktop discovered and ran the status command in a disposable project but showed no result; synthetic input is not a safe direct status display. |
+| [Desktop status investigation](v2-desktop-status-investigation.md) | Explains the 2.1.4 command's missing result, the stale command-description experiment, and the later 2.2 status action. |
+| [2.2 status RPC probe](../../scripts/probe-v2-gui-rpc.mjs) | Exercises the packed 2.2 status RPC with a local provider; verifies controls, invalid settings, no session messages or provider requests, and unchanged agent/model. |
+| [2.2 desktop status check](v2-desktop-status-2.2.0.json) | Records the native command-palette status dialog in the installed desktop, including the GUI plugin ID collision encountered during development. |
 | [Session-switch experiment](../../scripts/research-v2-session-switch.mjs) | Deliberate changes in synthetic CLI sessions only. |
 | [Effort experiment](../../scripts/research-v2-effort-override.mjs) | Local compatible-provider option override. |
 | [Controls experiment](../../scripts/research-v2-controls.mjs) | Local fixture command invoked through the host API. |

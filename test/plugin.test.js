@@ -6,10 +6,10 @@ import path from "node:path";
 import plugin from "../dist/index.js";
 import localEntry from "../server.js";
 
-test("v2 entry registers inspection and disposes it without routing hooks", async () => {
-  assert.equal(plugin.id, "opencode.openai-router");
+test("v2 entry registers status RPC and disposes it without routing hooks", async () => {
+  assert.equal(plugin.id, "openai-router");
   assert.equal(localEntry, plugin);
-  const commands = [];
+  let handlers;
   let disposed = false;
   const root = await mkdtemp(path.join(os.tmpdir(), "router-plugin-test-"));
   const previous = process.env.XDG_CONFIG_HOME;
@@ -18,13 +18,13 @@ test("v2 entry registers inspection and disposes it without routing hooks", asyn
   process.env.XDG_CONFIG_HOME = root;
   console.error = value => reports.push(JSON.parse(value));
   try {
-    const cleanup = await plugin.setup({ command: { transform: async callback => { callback({ add: command => commands.push(command) }); return { dispose: async () => { disposed = true; } }; } } });
-    assert.deepEqual(commands.map(command => command.name), ["openai-router-status"]);
+    const cleanup = await plugin.setup({ rpc: { register: async (definition, methods) => { assert.equal(definition.id, "openai-router-controls"); handlers = methods; return { dispose: async () => { disposed = true; } }; } } });
     await mkdir(path.join(root, "opencode-openai-router"));
     await writeFile(path.join(root, "opencode-openai-router", "config.json"), '{"mode":"off"}');
-    await commands[0].execute({});
-    assert.equal(reports[0].config.mode, "off");
-    assert.equal(reports[0].routing, "inactive");
+    const status = await handlers.status();
+    assert.equal(status.mode, "off");
+    assert.equal(status.routing, "inactive");
+    assert.deepEqual(reports, []);
     await cleanup();
     assert.equal(disposed, true);
     assert.equal("server" in plugin, false);

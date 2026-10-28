@@ -1,0 +1,11 @@
+{
+  "host": "OpenCode desktop 2.2.0",
+  "scope": "installed local development plugin and existing synthetic smoke-test session; no coding prompt sent",
+  "observations": [
+    "The original opencode.openai-router identifier was rejected for GUI loading as reserved; the development plugin was renamed openai-router.",
+    "The desktop command palette displayed OpenAI router: Show status, and invoking it opened a native dialog showing auto, balanced and automatic routing inactive.",
+    "The existing model remained displayed, and no new session update or coding message was observed.",
+    "The isolated server RPC fixture separately verified off and invalid settings, unchanged session model and agent, zero session messages and zero provider requests."
+  ],
+  "limitations": "GUI unload/reload, switching on 2.2 and real account compatibility are not established by this check."
+}

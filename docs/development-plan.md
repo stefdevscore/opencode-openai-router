@@ -1,6 +1,6 @@
 # v0.1 implementation plan
 
-Status: cut 1 is committed; cut 2 controls are implemented but its inspection checkpoint remains incomplete: the desktop discovers the status command but does not display its result. Later cuts remain planned. The target is OpenCode desktop 2.1.4. The product modes are `auto` (intended default) and `off`; there is no recommendation-only stage, manual role setup or model pin. No routing hook is registered. Develop actual automatic switching in isolated fixtures, with production release gated by [verification](specs/verification.md).
+Status: cut 1 is committed; cut 2 has an experimental native status dialog verified on OpenCode desktop 2.2.0 and awaits user QA. The earlier switching evidence targeted 2.1.4; 2.2 switching compatibility remains unverified. Later cuts remain planned. The product modes are `auto` (intended default) and `off`; there is no recommendation-only stage, manual role setup or model pin. No routing hook is registered. Develop actual automatic switching in isolated fixtures, with production release gated by [verification](specs/verification.md).
 
 ## 1. V2-only baseline and decision contracts — committed
 

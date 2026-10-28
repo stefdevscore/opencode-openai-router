@@ -3,7 +3,10 @@
   "version": "0.1.0-dev.0",
   "private": true,
   "type": "module",
-  "exports": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./gui-experimental": "./dist/gui-experimental.cjs"
+  },
   "files": [
     "dist",
     "docs",
@@ -12,16 +15,19 @@
     "server.js"
   ],
   "scripts": {
-    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsc",
+    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsc && vite build",
     "typecheck": "tsc --noEmit",
     "test": "npm run build && node --test",
     "check:docs": "node scripts/check-docs.mjs",
-    "probe:v2": "node scripts/probe-v2.mjs"
+    "probe:status": "node scripts/probe-v2-gui-rpc.mjs"
   },
   "devDependencies": {
-    "@opencode/client": "^2.1.4",
-    "@opencode/plugin": "2.1.4",
+    "@opencode/client": "2.2.0",
+    "@opencode/plugin": "2.2.0",
     "@types/node": "^24.19.2",
-    "typescript": "^5.9.3"
+    "solid-js": "1.9.17",
+    "typescript": "^5.9.3",
+    "vite": "7.3.7",
+    "vite-plugin-solid": "2.11.14"
   }
 }
