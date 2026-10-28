@@ -31,7 +31,13 @@ Build the scaffold first. All host probes require the exact version they name; d
 | [Desktop controls check](v2-desktop-controls-2.1.4.json) | The desktop discovered and ran the status command in a disposable project but showed no result; synthetic input is not a safe direct status display. |
 | [Desktop status investigation](v2-desktop-status-investigation.md) | Explains the 2.1.4 command's missing result, the stale command-description experiment, and the later 2.2 status action. |
 | [2.2 status RPC probe](../../scripts/probe-v2-gui-rpc.mjs) | Exercises the packed 2.2 status RPC with a local provider; verifies controls, invalid settings, no session messages or provider requests, and unchanged agent/model. |
+| [2.2 catalog RPC probe](../../scripts/probe-v2-catalog.mjs) | Exercises an enabled but unconnected OpenAI fixture, exact model/variant discovery and no provider inference. |
 | [2.2 desktop status check](v2-desktop-status-2.2.0.json) | Records the native command-palette status dialog in the installed desktop, including the GUI plugin ID collision encountered during development. |
+| [2.2 host adapter probe](../../scripts/probe-v2-host-adapter.mjs) | Packed adapter and local CLI fixture exercise model, variant and off scenarios with synthetic safety evidence; they do not validate real admission safety or desktop behavior. |
+| [2.2 host adapter investigation](v2-host-adapter-2.2.0.md) | Records fixture results and the pinned plugin API's admission, activity and queue limitations. |
+| [Host boundary proposal](host-boundary-proposal.md) | Describes a candidate host-side conditional selection contract and its acceptance tests; no such API is implemented by this plugin. |
+| [Upstream request](opencode-host-change-request.md) | Request with the 2.2 reproduction and desired host behavior, submitted as OpenCode issue #60018. |
+| [2.2 activity boundary probe](../../scripts/probe-v2-activity-boundary.mjs) | Holds a local provider request open and verifies a steer hook can run while a session is active and another input queued. Its fixture deliberately changes that isolated session's model. |
 | [Session-switch experiment](../../scripts/research-v2-session-switch.mjs) | Deliberate changes in synthetic CLI sessions only. |
 | [Effort experiment](../../scripts/research-v2-effort-override.mjs) | Local compatible-provider option override. |
 | [Controls experiment](../../scripts/research-v2-controls.mjs) | Local fixture command invoked through the host API. |

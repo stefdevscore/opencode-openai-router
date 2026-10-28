@@ -1,6 +1,8 @@
 # v0.1 implementation plan
 
-Status: cut 1 is committed; cut 2 has an experimental native status dialog verified on OpenCode desktop 2.2.0 and awaits user QA. The earlier switching evidence targeted 2.1.4; 2.2 switching compatibility remains unverified. Later cuts remain planned. The product modes are `auto` (intended default) and `off`; there is no recommendation-only stage, manual role setup or model pin. No routing hook is registered. Develop actual automatic switching in isolated fixtures, with production release gated by [verification](specs/verification.md).
+Status: cut 1 is committed; cut 2 has an experimental native status dialog verified on OpenCode desktop 2.2.0. Cut 3 has an unregistered adapter and a 2.2 CLI fixture demonstrating model and effort switches and off behavior. The fixture supplies synthetic safety evidence; the [host investigation](evidence/v2-host-adapter-2.2.0.md) records why production-safe admission and desktop acceptance remain open. Cut 4's catalog is implemented for review and was inspected in the connected desktop; model entitlement remains unverified. Cuts 5–8 remain planned. The product modes are `auto` (intended default) and `off`; there is no recommendation-only stage, manual role setup or model pin. No routing hook is registered. Develop actual automatic switching in isolated fixtures, with production release gated by [verification](specs/verification.md).
+
+Revisit cut 3 when [OpenCode issue #60018](https://github.com/anomalyco/opencode/issues/60018) or related host work supplies a supported safe selection boundary; repeat the host and desktop acceptance matrix before enabling routing. Cut 4 may proceed independently.
 
 ## 1. V2-only baseline and decision contracts — committed
 

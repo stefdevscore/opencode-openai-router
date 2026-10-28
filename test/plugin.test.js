@@ -34,3 +34,24 @@ test("v2 entry registers status RPC and disposes it without routing hooks", asyn
     await rm(root, { recursive: true, force: true });
   }
 });
+
+test('catalog RPC reports a connection requiring authentication as disconnected', async () => {
+  let handlers;
+  const root = await mkdtemp(path.join(os.tmpdir(), 'router-catalog-plugin-'));
+  const previous = process.env.XDG_CONFIG_HOME; process.env.XDG_CONFIG_HOME = root;
+  try {
+    const cleanup = await plugin.setup({
+      provider: { list: async () => ({ data: [{ id: 'openai' }] }) },
+      model: { list: async () => ({ data: [] }) },
+      integration: { connection: { active: async () => ({ type: 'credential', status: { status: 'needs_auth' } }) } },
+      event: { subscribe: async function* ({ signal }) { await new Promise(resolve => signal.addEventListener('abort', resolve, { once: true })); } },
+      rpc: { register: async (_definition, methods) => { handlers = methods; return { dispose: async () => {} }; } },
+    });
+    const result = await handlers.catalog();
+    assert.equal(result.hostAvailable, true); assert.equal(result.connected, false); assert.equal(result.fresh, false);
+    await cleanup();
+  } finally {
+    if (previous === undefined) delete process.env.XDG_CONFIG_HOME; else process.env.XDG_CONFIG_HOME = previous;
+    await rm(root, { recursive: true, force: true });
+  }
+});

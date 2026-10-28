@@ -1,6 +1,10 @@
 # Catalog normalization
 
-Status: planned v0.1 contract. Existing research and scaffold utilities do not establish full acceptance.
+Status: cut 4 implemented for review. The in-memory catalog and inspection action are implemented. The installed OpenCode 2.2 desktop displayed the connected provider and host-reported models; selecting a model displayed its variants. This is a read-only inspection check, not proof of model entitlement or a live routing test. No routing hook consumes the catalog.
+
+The 2.2 provider list is a host availability view, not proof of connection: a provider configured as enabled can appear without a connection. The implementation checks the provider's associated integration for connection presence separately and retains only a boolean. This does not resolve credentials, check quota or prove entitlement. Available provider and model reads are separate host calls, not an atomic host snapshot; provider/model/integration/config events invalidate the in-memory cache, but startup and event delivery cannot establish an atomic authorization boundary. A future adapter must independently revalidate through a proven host boundary.
+
+The desktop command palette action reads a bounded list of model IDs, context limits, tool support, input modalities and variant names. It never exposes variant settings or credentials. It reports when the host provider is absent, the connection is missing or needs authentication, results are incomplete or stale, or the list is truncated. The local fixture verifies that an enabled, disconnected OpenAI provider can expose model metadata without inference or session mutation; it does not test the user's account.
 
 ## Source and schema
 

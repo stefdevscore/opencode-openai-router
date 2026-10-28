@@ -39,6 +39,8 @@ For the pinned macOS target, settings are read from `$XDG_CONFIG_HOME/opencode-o
 
 `mode` accepts `auto` or `off`; `profile` accepts `economy`, `balanced` or `quality`. Unknown fields and invalid values are rejected. The plugin does not create or rewrite this file and ignores project plugin options. In this cut neither mode switches models. In a session on OpenCode 2.2, open the command palette with `Cmd+P` and select **OpenAI router: Show status**. The action reads current controls and displays them in a native dialog. It is intentionally not a slash command: the host can apply the composer's model or agent when running one. See the [controls specification](docs/specs/controls.md) for reload and failure behavior.
 
+The command palette also offers **OpenAI router: Show model catalog** for a searchable, read-only view of host-reported OpenAI models. Select a model to see its variants. Host availability, a detected connection and actual account entitlement are different facts; the view does not establish that a model can be used with an account. Restart OpenCode after rebuilding a locally installed development plugin so the desktop loads the new GUI bundle.
+
 After building, an optional credential-free probe can exercise a pinned host with a local provider:
 
 ```sh

@@ -61,6 +61,11 @@ try {
   const rpc = client.rpc(RouterRpc);
   const status = await rpc.status({}, { location });
   assert.deepEqual({ status: status.status, mode: status.mode, profile: status.profile, routing: status.routing }, { status: "ready", mode: "off", profile: "quality", routing: "inactive" });
+  const catalog = await rpc.catalog({}, { location });
+  assert.equal(catalog.hostAvailable, false, "Local fixture has no OpenAI provider");
+  assert.equal(catalog.connected, null, "A missing provider does not prove connection state");
+  assert.equal(catalog.fresh, false);
+  assert.deepEqual(catalog.models, []);
   await writeFile(path.join(root, "config", "opencode-openai-router", "config.json"), '{"mode":null}');
   const invalid = await rpc.status({}, { location });
   assert.equal(invalid.status, "invalid_config");
@@ -72,7 +77,7 @@ try {
   assert.deepEqual(afterSession.agent, beforeSession.agent, "Inspection did not change agent");
   assert.deepEqual(afterSession.model, beforeSession.model, "Inspection did not change model");
   assert.equal(requests.length, 0, "Inspection made no provider request");
-  console.log(JSON.stringify({ version: "2.2.0", scope: "isolated server API; no desktop UI", status, invalid, messagesBefore: before.data.length, messagesAfter: after.data.length, providerRequests: requests.length, selectionUnchanged: true }, null, 2));
+  console.log(JSON.stringify({ version: "2.2.0", scope: "isolated server API; no desktop UI", status, catalog, invalid, messagesBefore: before.data.length, messagesAfter: after.data.length, providerRequests: requests.length, selectionUnchanged: true }, null, 2));
 } finally {
   if (child && child.exitCode === null) {
     child.kill("SIGTERM");
