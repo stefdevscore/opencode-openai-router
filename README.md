@@ -8,7 +8,7 @@ The package is a development scaffold. User configuration and an experimental Op
 
 The accepted design uses native session switching. With automatic routing enabled, the plugin may replace a manual model or variant choice, update the picker and leave that selection in place for later turns. Disable routing for manual control; disabling will not restore an earlier selection or reverse a switch already issued. The planned profiles are Economy, Balanced and Quality, with optional local observations. There is no recommendation-only mode.
 
-Basic session switching was observed in a desktop/local-provider fixture on OpenCode **2.1.4**. Desktop status is now being developed against **2.2.0**, which has an experimental GUI API; the switching adapter has not been validated on that version. Safe admission ordering, effective controls, policy quality and production compatibility remain implementation and release work. Catalog discovery does not establish model quality, account entitlement or subscription allowance savings. Planned background evidence lookup and optional budgeted model classification supply provisional capability assessments; coding-task assessment stays local and users do not assign model roles.
+Basic session switching was observed in a desktop/local-provider fixture on OpenCode **2.1.4**. Desktop status is now being developed against **2.2.0**, which has an experimental GUI API; the switching adapter has not been validated on that version. Safe admission ordering, effective controls, policy quality and production compatibility remain implementation and release work. Catalog discovery does not establish model quality, account entitlement or subscription allowance savings. Planned background evidence lookup and automatically budgeted model classification supply provisional capability assessments for newly added models; coding-task assessment stays local and users do not assign model roles. The intended implementation ships within the plugin and uses OpenCode's existing connection, with plugin-managed local state and no separately installed service, database or API key.
 
 ## Documentation
 
@@ -56,3 +56,5 @@ CI installs locked dependencies, audits high/critical advisories, checks types a
 The v1 plugin dependency and its overrides were removed. The remaining v2 dependency graph contains no `toml` package, so the legacy v1 TOML compatibility test is no longer applicable. Reassess dependencies and parser compatibility when future implementation introduces them.
 
 The package remains private at `0.1.0-dev.0`. The release-readiness workflow explicitly fails instead of publishing until the [release gates](docs/specs/verification.md) are implemented and verified.
+
+The command palette also offers **OpenAI router: Show evidence and usage**. This reads existing local assessment counts and dispatch history without creating state or invoking a model. Classification remains inactive while cut 5 integration is unfinished.

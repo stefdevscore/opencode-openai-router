@@ -11,6 +11,8 @@ export interface Variant {
 export interface Model {
   id: string;
   providerID?: string;
+  /** Provider-facing identity; retained locally and never exposed by inspection RPC. */
+  providerModelID?: string;
   contextLimit: number | null;
   inputLimit?: number | null;
   outputLimit?: number | null;
@@ -77,7 +79,8 @@ export function normalizeV2Catalog(value: unknown): Catalog {
         });
       }
     }
-    models.push({ id: raw.id, providerID: "openai", contextLimit: number(limit.context), inputLimit: number(limit.input), outputLimit: number(limit.output), toolCalls: tools, inputModalities: modalities(caps?.input), outputModalities: modalities(caps?.output), variants: normalized });
+    const providerModelID = typeof raw.modelID === 'string' && raw.modelID.length > 0 && raw.modelID.length <= 128 ? raw.modelID : undefined;
+    models.push({ id: raw.id, providerID: "openai", ...(providerModelID === undefined ? {} : { providerModelID }), contextLimit: number(limit.context), inputLimit: number(limit.input), outputLimit: number(limit.output), toolCalls: tools, inputModalities: modalities(caps?.input), outputModalities: modalities(caps?.output), variants: normalized });
   }
   if (!sawOpenAI) return { status: "unavailable", reason: complete ? "missing_provider" : "invalid_response" };
   return { status: "available", complete, models };

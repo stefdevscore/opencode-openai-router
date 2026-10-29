@@ -2,6 +2,16 @@
 export const RouterRpc = {
   id: "openai-router-controls",
   methods: {
+    evidence: {
+      input: { type: 'object', properties: {}, additionalProperties: false },
+      output: {
+        type: 'object', properties: {
+          status: { enum: ['inactive', 'unavailable'] },
+          pending: { type: 'integer', minimum: 0 }, completed: { type: 'integer', minimum: 0 }, unknown: { type: 'integer', minimum: 0 },
+          notices: { type: 'array', maxItems: 100, items: { type: 'object', properties: { id: { type: 'string', maxLength: 36 }, createdAt: { type: 'integer', minimum: 0 }, status: { enum: ['reserved', 'started', 'unknown', 'completed', 'cancelled'] } }, required: ['id', 'createdAt', 'status'], additionalProperties: false } },
+        }, required: ['status', 'pending', 'completed', 'unknown', 'notices'], additionalProperties: false,
+      },
+    },
     status: {
       input: { type: "object", properties: {}, additionalProperties: false },
       output: {

@@ -6,8 +6,9 @@ export const WINDOW_MS = 24 * 60 * 60 * 1000;
 export const DEFAULT_DISPATCH_LIMIT = 4;
 
 /** Intended for a user-visible notice only after a background dispatch actually starts. */
-export function formatDispatchNotice(usage: UsageSnapshot): string {
-  return `OpenAI router used 1 background model dispatch (${usage.dispatchesInWindow} of ${usage.limit} in the rolling 24-hour window). Token usage and subscription allowance are unavailable; the host may retry.`;
+export function formatDispatchNotice(usage: UsageSnapshot, status: 'started' | 'unknown' = 'started'): string {
+  const action = status === 'started' ? 'started 1 background model dispatch' : 'may have started 1 background model dispatch (outcome unknown)';
+  return `OpenAI router ${action} (${usage.dispatchesInWindow} of ${usage.limit} reservations in the rolling 24-hour window). Token usage and subscription allowance are unavailable; the host may retry.`;
 }
 
 /** Reserve before starting an operation. Persist atomically before issuing a real request. */

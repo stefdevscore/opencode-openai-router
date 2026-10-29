@@ -20,15 +20,17 @@ export type WorkerResult = 'unchanged' | 'disabled' | 'limited' | 'unavailable' 
 /** Not registered in the production plugin until storage, calibration and notifications are verified. */
 export class AssessmentWorker {
   private stopped = false;
-  private current: Promise<WorkerResult> | undefined;
+  private tail: Promise<void> = Promise.resolve();
+  private queued = 0;
   constructor(private readonly deps: WorkerDependencies) {}
   dispose(): void { this.stopped = true; }
   run(packets: readonly EvidencePacket[], classifier: Classifier): Promise<WorkerResult> {
     if (this.stopped) return Promise.resolve('disabled');
-    if (this.current) return this.current;
-    const work = this.execute(packets, classifier).catch((): WorkerResult => 'unavailable');
-    this.current = work;
-    void work.finally(() => { if (this.current === work) this.current = undefined; });
+    if (this.queued >= 16) return Promise.resolve('unavailable');
+    this.queued++;
+    // Serialize distinct batches instead of returning another batch's result and losing work.
+    const work = this.tail.then(() => this.stopped ? 'disabled' as const : this.execute(packets, classifier)).catch((): WorkerResult => 'unavailable');
+    this.tail = work.then(() => { this.queued--; }, () => { this.queued--; });
     return work;
   }
   private async execute(packets: readonly EvidencePacket[], classifier: Classifier): Promise<WorkerResult> {
@@ -61,6 +63,8 @@ export class AssessmentWorker {
     let parsed: unknown; try { parsed = JSON.parse(response); } catch { return 'invalid'; }
     const assessments = validateAssessments(parsed, missing);
     if (!assessments) return 'invalid';
+    const current = await this.deps.controls.refresh();
+    if (this.stopped || current.status !== 'ready' || current.config?.mode !== 'auto' || current.generation !== initial.generation) return 'disabled';
     const byID = new Map(assessments.map(a => [a.modelID, a]));
     await this.deps.save(missing.map((packet, index) => ({ fingerprint: selected[index], assessment: byID.get(packet.modelID)! })));
     return 'saved';

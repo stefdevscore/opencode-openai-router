@@ -2,6 +2,14 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import gui from "../dist/gui.js";
 
+test('evidence inspection displays status and usage limits without generation', async () => {
+  const commands = [], alerts = []; let calls = 0;
+  const session = { key: 'evidence', location: { directory: '/fixture' }, pending: false, server: { client: { rpc: () => ({ evidence: async () => { calls++; return { status: 'inactive', pending: 1, completed: 2, unknown: 0, notices: [] }; } }) } } };
+  gui.setup({ signal: new AbortController().signal, sessions: { current: () => session }, dialogs: { select: async options => { assert.match(options.options[0].description, /Pending: 1/); return 'summary'; }, alert: async value => alerts.push(value) }, add: (_registry, get) => commands.push(get()) });
+  await commands.find(item => item.id === 'evidence').run();
+  assert.equal(calls, 1); assert.match(alerts[0].description, /classification is inactive/); assert.match(alerts[0].description, /allowance: unavailable/);
+});
+
 test("desktop status reads the session's server and displays an inference-free result", async () => {
   let command;
   let calls = 0;

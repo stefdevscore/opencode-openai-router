@@ -2,6 +2,7 @@ import type { Plugin } from "@opencode/plugin/promise/plugin";
 import { ControlStore, fileControlReader, userConfigPath } from "./controls/index.js";
 import { RouterRpc } from "./rpc.js";
 import { CatalogStore } from "./catalog/store.js";
+import { evidenceStateDirectory, existingEvidenceState } from './evidence/state-path.js';
 
 /** Controls are available now; no routing hook is registered until the adapter is proven. */
 const plugin: Plugin = {
@@ -32,6 +33,14 @@ const plugin: Plugin = {
     let registration;
     try {
       registration = await ctx.rpc.register(RouterRpc, {
+        evidence: async () => {
+          try {
+            const file = existingEvidenceState(evidenceStateDirectory());
+            if (!file) return { status: 'inactive' as const, pending: 0, completed: 0, unknown: 0, notices: [] };
+            const { EvidenceStore } = await import('./evidence/store.js');
+            return { status: 'inactive' as const, ...EvidenceStore.inspect(file) };
+          } catch { return { status: 'unavailable' as const, pending: 0, completed: 0, unknown: 0, notices: [] }; }
+        },
         status: async () => {
           const current = await controls.refresh();
           return { status: current.status, mode: current.status === "ready" ? current.config?.mode ?? null : null, profile: current.status === "ready" ? current.config?.profile ?? null : null, generation: current.generation, routing: "inactive" };

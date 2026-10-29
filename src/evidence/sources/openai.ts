@@ -1,7 +1,23 @@
 import type { EvidencePacket } from '../assessment.js';
+import type { Model } from '../../catalog/index.js';
 
 export const OPENAI_MODEL_INDEX = 'https://developers.openai.com/api/docs/models.md';
 const MAX_BYTES = 512 * 1024;
+
+/** Extract unique unambiguous public model IDs without uploading host identifiers. */
+export function listPublicModelIDs(markdown: string): readonly string[] {
+  if (Buffer.byteLength(markdown, 'utf8') > MAX_BYTES) return [];
+  const found = new Map<string, string>(); const ambiguous = new Set<string>();
+  for (const line of markdown.split(/\r?\n/)) {
+    if (line.length > 2048) continue;
+    const match = /^- \[[^\]\n]{1,256}\]\(\/api\/docs\/models\/([a-z0-9][a-z0-9._-]{0,127})\.md\): (.{1,1000})$/.exec(line);
+    if (!match) continue;
+    if (found.has(match[1]) && found.get(match[1]) !== line) ambiguous.add(match[1]);
+    else found.set(match[1], line);
+  }
+  if (found.size > 4096 || ambiguous.size) return [];
+  return [...found.keys()].sort();
+}
 
 /** Exact index path match only; caller must separately establish the host ID is not a private alias. */
 export function parseOpenAIIndex(markdown: string, publicModelIDs: readonly string[]): EvidencePacket[] {
@@ -16,6 +32,18 @@ export function parseOpenAIIndex(markdown: string, publicModelIDs: readonly stri
     else found.set(match[1], line);
   }
   return [...found].filter(([id]) => !ambiguous.has(id)).map(([modelID, text]) => ({ modelID, sources: [{ id: 'openai-model-index', url: OPENAI_MODEL_INDEX, text }] }));
+}
+
+/** Resolve locally against the complete public index; the host alias is never sent to the source. */
+export function matchPublicModels(markdown: string, models: readonly Model[]): { hostID: string; publicID: string; packet: EvidencePacket }[] {
+  if (models.length > 4096) return [];
+  const candidates = models.filter(model => model.providerID === 'openai' && typeof model.providerModelID === 'string');
+  const ids = [...new Set(candidates.map(model => model.providerModelID!))];
+  const packets = new Map(parseOpenAIIndex(markdown, ids).map(packet => [packet.modelID, packet]));
+  return candidates.flatMap(model => {
+    const packet = packets.get(model.providerModelID!);
+    return packet ? [{ hostID: model.id, publicID: packet.modelID, packet }] : [];
+  });
 }
 
 /** Fetches one fixed public URL, with no model identifiers or credentials in the request. */

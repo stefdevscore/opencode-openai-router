@@ -59,6 +59,8 @@ try {
   const before = await client.message.list({ sessionID: session.id });
   const beforeSession = await client.session.get({ sessionID: session.id });
   const rpc = client.rpc(RouterRpc);
+  const evidence = await rpc.evidence({}, { location });
+  assert.deepEqual(evidence, { status: 'inactive', pending: 0, completed: 0, unknown: 0, notices: [] });
   const status = await rpc.status({}, { location });
   assert.deepEqual({ status: status.status, mode: status.mode, profile: status.profile, routing: status.routing }, { status: "ready", mode: "off", profile: "quality", routing: "inactive" });
   const catalog = await rpc.catalog({}, { location });
@@ -77,7 +79,7 @@ try {
   assert.deepEqual(afterSession.agent, beforeSession.agent, "Inspection did not change agent");
   assert.deepEqual(afterSession.model, beforeSession.model, "Inspection did not change model");
   assert.equal(requests.length, 0, "Inspection made no provider request");
-  console.log(JSON.stringify({ version: "2.2.0", scope: "isolated server API; no desktop UI", status, catalog, invalid, messagesBefore: before.data.length, messagesAfter: after.data.length, providerRequests: requests.length, selectionUnchanged: true }, null, 2));
+  console.log(JSON.stringify({ version: "2.2.0", scope: "isolated server API; no desktop UI", status, catalog, evidence, invalid, messagesBefore: before.data.length, messagesAfter: after.data.length, providerRequests: requests.length, selectionUnchanged: true }, null, 2));
 } finally {
   if (child && child.exitCode === null) {
     child.kill("SIGTERM");

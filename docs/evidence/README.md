@@ -4,6 +4,8 @@ These records support the [feasibility assessment](../v2-product-feasibility.md)
 
 ## Recorded results
 
+[Automatic extraction calibration](v2-automatic-calibration-2.2.0.md) records the implemented bootstrap/replacement path, passing loopback transport test and unsuccessful bounded live compatibility attempts.
+
 | Record | What it demonstrates | Main limit |
 | --- | --- | --- |
 | [Host 2.1.4](host-2.1.4.json) | Loader, fixture prompt hook and local model listing. | Instrumentation wrapper; no routing policy. |
@@ -32,6 +34,9 @@ Build the scaffold first. All host probes require the exact version they name; d
 | [Desktop status investigation](v2-desktop-status-investigation.md) | Explains the 2.1.4 command's missing result, the stale command-description experiment, and the later 2.2 status action. |
 | [2.2 status RPC probe](../../scripts/probe-v2-gui-rpc.mjs) | Exercises the packed 2.2 status RPC with a local provider; verifies controls, invalid settings, no session messages or provider requests, and unchanged agent/model. |
 | [2.2 catalog RPC probe](../../scripts/probe-v2-catalog.mjs) | Exercises an enabled but unconnected OpenAI fixture, exact model/variant discovery and no provider inference. |
+| [2.2 evidence store probe](../../scripts/probe-v2-evidence-store.mjs) | Loads the experimental SQLite store in the OpenCode 2.2 server runtime with an isolated local fixture; it does not test recovery ownership, account inference or desktop notifications. |
+| [2.2 catalog readiness investigation](v2-catalog-readiness-2.2.0.md) | Explains why a parsed model list can still reflect a cached or bundled startup snapshot; a false-new-model fixture and a readiness signal remain unverified. |
+| [2.2 baseline pipeline probe](../../scripts/probe-v2-baseline.mjs) | Runs the packed baseline pipeline inside the host with simulated catalog stages and public evidence; no account or real refresh is exercised. |
 | [2.2 stateless generation probe](../../scripts/probe-v2-classifier-transport.mjs) | Exercises stateless generation with a local provider and checks session isolation; does not test a connected account or measure usage. |
 | [2.2 desktop status check](v2-desktop-status-2.2.0.json) | Records the native command-palette status dialog in the installed desktop, including the GUI plugin ID collision encountered during development. |
 | [2.2 host adapter probe](../../scripts/probe-v2-host-adapter.mjs) | Packed adapter and local CLI fixture exercise model, variant and off scenarios with synthetic safety evidence; they do not validate real admission safety or desktop behavior. |

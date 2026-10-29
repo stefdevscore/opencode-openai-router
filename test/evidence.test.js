@@ -32,6 +32,7 @@ test('rolling dispatch allowance renews automatically and reports token and mone
   const exhausted = reserveDispatch(ledger, now + 4); assert.equal(exhausted.allowed, false); assert.equal(exhausted.usage.nextEligibleAt, now + WINDOW_MS); assert.equal(exhausted.usage.tokenUsage, null); assert.equal(exhausted.usage.cost, null);
   assert.equal(reserveDispatch(ledger, now + WINDOW_MS).allowed, true);
   assert.match(formatDispatchNotice(exhausted.usage), /Token usage and subscription allowance are unavailable/);
+  assert.match(formatDispatchNotice(exhausted.usage, 'unknown'), /may have started.*outcome unknown/);
   assert.equal(reserveDispatch(ledger, 0).allowed, false);
 });
 
@@ -42,6 +43,26 @@ test('OpenAI index adapter matches exact public IDs and rejects conflicts and al
   assert.deepEqual(packets.map(item => item.modelID), ['model-a']);
   assert.match(packets[0].sources[0].text, /coding ability/);
   assert.deepEqual(parseOpenAIIndex(text + '- [Model A](/api/docs/models/model-a.md): Contradictory entry.\n', ['model-a']), []);
+});
+
+test('public baseline rejects ambiguous source entries instead of baselining partial data', async () => {
+  const { listPublicModelIDs } = await import('../dist/evidence/sources/openai.js');
+  const valid = '- [A](/api/docs/models/model-a.md): First description.\n- [B](/api/docs/models/model-b.md): Second description.\n';
+  assert.deepEqual(listPublicModelIDs(valid), ['model-a', 'model-b']);
+  assert.deepEqual(listPublicModelIDs(valid + '- [A](/api/docs/models/model-a.md): Conflicting description.\n'), []);
+  assert.deepEqual(listPublicModelIDs('not a supported index'), []);
+});
+
+test('public evidence mapping uses explicit provider identity, never the host alias', async () => {
+  const { normalizeV2Catalog } = await import('../dist/catalog/index.js');
+  const { matchPublicModels } = await import('../dist/evidence/sources/openai.js');
+  const hostModel = (id, modelID) => ({ providerID: 'openai', id, modelID, enabled: true, status: 'active', variants: [] });
+  const catalog = normalizeV2Catalog({ data: [hostModel('private-alias', 'public-a'), hostModel('public-a', 'private-custom'), hostModel('no-provider-id', undefined), hostModel('invalid', '../secret')] });
+  const text = '- [Public A](/api/docs/models/public-a.md): Public model supports coding.\n';
+  const matches = matchPublicModels(text, catalog.models);
+  assert.deepEqual(matches.map(({ hostID, publicID }) => ({ hostID, publicID })), [{ hostID: 'private-alias', publicID: 'public-a' }]);
+  assert.equal(matches[0].packet.modelID, 'public-a');
+  assert.ok(!JSON.stringify(matches[0].packet).includes('private-alias'));
 });
 
 test('OpenAI index fetch is fixed-host, bounded and rejects redirects or other content types', async () => {
@@ -103,4 +124,36 @@ test('worker discards malformed output and late responses after unload', async (
   const promise = worker.run([{ modelID: 'model-a', sources: [] }], { modelID: 'judge', calibrationVersion: 'v1' });
   await new Promise(resolve => setImmediate(resolve)); worker.dispose(); finish('{invalid');
   assert.equal(await promise, 'invalid'); assert.equal(saves, 0);
+});
+
+test('worker retains a distinct batch arriving while another request is in flight', async () => {
+  const { AssessmentWorker } = await import('../dist/evidence/worker.js');
+  const { ControlStore } = await import('../dist/controls/index.js');
+  let release; const gate = new Promise(resolve => { release = resolve; });
+  const calls = []; const saved = [];
+  const controls = new ControlStore(async () => ({ status: 'ready', config: { mode: 'auto', profile: 'balanced' } }));
+  const worker = new AssessmentWorker({ controls, reserve: async () => ({ allowed: true, usage: { dispatchesInWindow: 1, limit: 4, nextEligibleAt: null, tokenUsage: null, cost: null } }), cached: async () => false, save: async rows => saved.push(...rows), generate: async (_classifier, prompt) => { const id = prompt.includes('model-a') ? 'model-a' : 'model-b'; calls.push(id); if (id === 'model-a') await gate; return JSON.stringify({ assessments: [{ modelID: id, basis: 'provisional', suitability: 'unknown', references: [] }] }); }, notify: () => {} });
+  const classifier = { modelID: 'judge', calibrationVersion: 'test' };
+  const first = worker.run([{ modelID: 'model-a', sources: [] }], classifier);
+  await new Promise(resolve => setImmediate(resolve));
+  const second = worker.run([{ modelID: 'model-b', sources: [] }], classifier);
+  release();
+  assert.deepEqual(await Promise.all([first, second]), ['saved', 'saved']);
+  assert.deepEqual(calls, ['model-a', 'model-b']);
+  assert.deepEqual(saved.map(item => item.assessment.modelID), calls);
+});
+
+test('worker discards an otherwise valid result when the router was disabled in flight', async () => {
+  const { AssessmentWorker } = await import('../dist/evidence/worker.js');
+  const { ControlStore } = await import('../dist/controls/index.js');
+  let mode = 'auto', release; let saves = 0;
+  const gate = new Promise(resolve => { release = resolve; });
+  const controls = new ControlStore(async () => ({ status: 'ready', config: { mode, profile: 'balanced' } }));
+  const worker = new AssessmentWorker({ controls, reserve: async () => ({ allowed: true, usage: { dispatchesInWindow: 1, limit: 4, nextEligibleAt: null, tokenUsage: null, cost: null } }), cached: async () => false, save: async () => { saves++; }, generate: () => gate, notify: () => {} });
+  const result = worker.run([{ modelID: 'model-a', sources: [] }], { modelID: 'judge', calibrationVersion: 'test' });
+  await new Promise(resolve => setImmediate(resolve));
+  mode = 'off'; await controls.refresh();
+  release(JSON.stringify({ assessments: [{ modelID: 'model-a', basis: 'provisional', suitability: 'unknown', references: [] }] }));
+  assert.equal(await result, 'disabled');
+  assert.equal(saves, 0);
 });

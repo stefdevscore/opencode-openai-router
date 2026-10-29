@@ -2,10 +2,29 @@ import { Command, Plugin } from "@opencode/plugin/gui";
 import { RouterRpc } from "./rpc.js";
 
 type Status = { status: string; mode: string | null; profile: string | null; routing: string };
+type EvidenceView = { status: 'inactive' | 'unavailable'; pending: number; completed: number; unknown: number; notices: { id: string; createdAt: number; status: string }[] };
 type CatalogView = { status: string; hostAvailable: boolean | null; connected: boolean | null; complete: boolean | null; fresh: boolean; truncated: boolean; models: { id: string; context: number | null; tools: boolean | null; input: string[] | null; variants: string[] | null }[] };
 
 export default Plugin.define({
   setup(ctx) {
+    ctx.add(Command, () => ({
+      id: 'evidence', title: 'OpenAI router: Show evidence and usage', description: 'Inspect background assessment status and local dispatch history',
+      run: async () => {
+        const session = ctx.sessions.current();
+        if (!session?.location || session.pending) { await ctx.dialogs.alert({ title: 'OpenAI router evidence', description: 'Open a session first to inspect evidence and usage.' }); return; }
+        try {
+          const value = await session.server.client.rpc(RouterRpc).evidence({}, { location: session.location, signal: ctx.signal }) as EvidenceView;
+          if (ctx.signal.aborted || ctx.sessions.current()?.key !== session.key) return;
+          const summary = value.status === 'unavailable' ? 'Local evidence state is unavailable.' : `Background classification is inactive. Pending: ${value.pending}. Completed: ${value.completed}. Unknown: ${value.unknown}. Tokens, cost and subscription allowance: unavailable.`;
+          const selected = await ctx.dialogs.select({ title: 'OpenAI router evidence and usage', placeholder: 'Search dispatch history', options: [{ title: 'Evidence status', description: summary, value: 'summary', group: 'Overview' }, ...value.notices.slice().reverse().map(notice => ({ title: new Date(notice.createdAt).toLocaleString(), description: `Dispatch status: ${notice.status}`, value: notice.id, group: 'Local history' }))] });
+          if (selected === undefined || ctx.signal.aborted || ctx.sessions.current()?.key !== session.key) return;
+          const notice = value.notices.find(item => item.id === selected);
+          await ctx.dialogs.alert({ title: 'OpenAI router evidence', description: notice ? `Status: ${notice.status}. A reservation is not proof of provider usage. Exact tokens, cost and subscription allowance are unavailable.` : summary });
+        } catch {
+          if (!ctx.signal.aborted && ctx.sessions.current()?.key === session.key) await ctx.dialogs.alert({ title: 'OpenAI router evidence', description: 'Evidence and usage are unavailable for this session.' });
+        }
+      },
+    }));
     ctx.add(Command, () => ({
       id: "status",
       title: "OpenAI router: Show status",
